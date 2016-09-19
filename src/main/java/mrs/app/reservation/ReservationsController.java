@@ -43,7 +43,7 @@ public class ReservationsController {
 		return form;
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	String reserveForm(
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
 			@PathVariable("roomId") Integer roomId, Model model) {
@@ -60,7 +60,7 @@ public class ReservationsController {
 		return "reservations/reserveForm";
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@PostMapping
 	String reserve(@Validated ReservationForm form, BindingResult bindingResult,
 			@AuthenticationPrincipal ReservationUserDetails userDetails,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
@@ -87,7 +87,7 @@ public class ReservationsController {
 		return "redirect:/reservations/{date}/{roomId}";
 	}
 
-	@RequestMapping(method = RequestMethod.POST, params = "cancel")
+	@PostMapping(params = "cancel")
 	String cancel(@RequestParam("reservationId") Integer reservationId,
 			@PathVariable("roomId") Integer roomId,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
