@@ -1,6 +1,6 @@
 #!/bin/sh
 
-commitid=
+commitid=24ffe2020330b9267c9e959e3cf74ed5669ebfff
 
 branches=`git branch -l | tr '*' ' '`
 
