@@ -15,37 +15,37 @@ INSERT INTO meeting_room (room_name) VALUES ('有楽町');
 --
 
 INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE, (SELECT room_id FROM meeting_room WHERE room_name = '新木場'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 1, (SELECT room_id FROM meeting_room WHERE room_name = '新木場'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 2, (SELECT room_id FROM meeting_room WHERE room_name = '新木場'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 3, (SELECT room_id FROM meeting_room WHERE room_name = '新木場'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 4, (SELECT room_id FROM meeting_room WHERE room_name = '新木場'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '新木場'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '新木場'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '新木場'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 4 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '新木場'));
 
 INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE, (SELECT room_id FROM meeting_room WHERE room_name = '辰巳'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 1, (SELECT room_id FROM meeting_room WHERE room_name = '辰巳'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 2, (SELECT room_id FROM meeting_room WHERE room_name = '辰巳'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 3, (SELECT room_id FROM meeting_room WHERE room_name = '辰巳'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 4, (SELECT room_id FROM meeting_room WHERE room_name = '辰巳'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '辰巳'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '辰巳'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '辰巳'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 4 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '辰巳'));
 
 INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE, (SELECT room_id FROM meeting_room WHERE room_name = '豊洲'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 1, (SELECT room_id FROM meeting_room WHERE room_name = '豊洲'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 2, (SELECT room_id FROM meeting_room WHERE room_name = '豊洲'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 3, (SELECT room_id FROM meeting_room WHERE room_name = '豊洲'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 4, (SELECT room_id FROM meeting_room WHERE room_name = '豊洲'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '豊洲'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '豊洲'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '豊洲'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 4 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '豊洲'));
 
 INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE, (SELECT room_id FROM meeting_room WHERE room_name = '新富町'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 1, (SELECT room_id FROM meeting_room WHERE room_name = '新富町'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 2, (SELECT room_id FROM meeting_room WHERE room_name = '新富町'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 3, (SELECT room_id FROM meeting_room WHERE room_name = '新富町'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 4, (SELECT room_id FROM meeting_room WHERE room_name = '新富町'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '新富町'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '新富町'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '新富町'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 4 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '新富町'));
 
 INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE, (SELECT room_id FROM meeting_room WHERE room_name = '銀座一丁目'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 1, (SELECT room_id FROM meeting_room WHERE room_name = '銀座一丁目'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 2, (SELECT room_id FROM meeting_room WHERE room_name = '銀座一丁目'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 3, (SELECT room_id FROM meeting_room WHERE room_name = '銀座一丁目'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 4, (SELECT room_id FROM meeting_room WHERE room_name = '銀座一丁目'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '銀座一丁目'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '銀座一丁目'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '銀座一丁目'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 4 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '銀座一丁目'));
 
 INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE, (SELECT room_id FROM meeting_room WHERE room_name = '有楽町'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 1, (SELECT room_id FROM meeting_room WHERE room_name = '有楽町'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 2, (SELECT room_id FROM meeting_room WHERE room_name = '有楽町'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 3, (SELECT room_id FROM meeting_room WHERE room_name = '有楽町'));
-INSERT INTO reservable_room (reserved_date, room_id) VALUES (CURRENT_DATE + 4, (SELECT room_id FROM meeting_room WHERE room_name = '有楽町'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '有楽町'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 2 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '有楽町'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 3 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '有楽町'));
+INSERT INTO reservable_room (reserved_date, room_id) VALUES (DATE_ADD(CURRENT_DATE, INTERVAL 4 DAY), (SELECT room_id FROM meeting_room WHERE room_name = '有楽町'));
