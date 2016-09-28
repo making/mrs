@@ -1,9 +1,8 @@
 #!/bin/sh
 
-commitid=24ffe2020330b9267c9e959e3cf74ed5669ebfff
+commitid=$1
 
 branches=`git branch -l | tr '*' ' '`
-
 for b in $branches
 do
     if [ "$b" != "00-beginning" ];then
