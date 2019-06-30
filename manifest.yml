@@ -1,0 +1,5 @@
+applications:
+- name: mrs
+  path: target/mrs-0.0.1-SNAPSHOT.jar
+  services:
+  - mrs-db # cf create-service p.mysql db-small mrs-db
