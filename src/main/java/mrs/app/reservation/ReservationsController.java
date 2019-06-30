@@ -15,7 +15,6 @@ import mrs.domain.service.reservation.UnavailableReservationException;
 import mrs.domain.service.room.RoomService;
 import mrs.domain.service.user.ReservationUserDetails;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,11 +27,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("reservations/{date}/{roomId}")
 public class ReservationsController {
-	@Autowired
-	RoomService roomService;
+	private final RoomService roomService;
+	private final ReservationService reservationService;
 
-	@Autowired
-	ReservationService reservationService;
+	public ReservationsController(RoomService roomService, ReservationService reservationService) {
+		this.roomService = roomService;
+		this.reservationService = reservationService;
+	}
 
 	@ModelAttribute
 	public ReservationForm setUpForm() {

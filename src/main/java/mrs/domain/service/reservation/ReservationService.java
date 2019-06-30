@@ -6,7 +6,6 @@ import mrs.domain.model.*;
 import mrs.domain.repository.reservation.ReservationRepository;
 import mrs.domain.repository.room.ReservableRoomRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
@@ -17,11 +16,13 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @Transactional
 public class ReservationService {
-	@Autowired
-	ReservationRepository reservationRepository;
+	private final ReservationRepository reservationRepository;
+	private final ReservableRoomRepository reservableRoomRepository;
 
-	@Autowired
-	ReservableRoomRepository reservableRoomRepository;
+	public ReservationService(ReservationRepository reservationRepository, ReservableRoomRepository reservableRoomRepository) {
+		this.reservationRepository = reservationRepository;
+		this.reservableRoomRepository = reservableRoomRepository;
+	}
 
 	public List<Reservation> findReservations(ReservableRoomId reservableRoomId) {
 		return reservationRepository

@@ -6,7 +6,6 @@ import java.util.List;
 import mrs.domain.model.ReservableRoom;
 import mrs.domain.service.room.RoomService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("rooms")
 public class RoomsController {
-	@Autowired
-	RoomService roomService;
+	private final RoomService roomService;
+
+	public RoomsController(RoomService roomService) {
+		this.roomService = roomService;
+	}
 
 	@GetMapping
 	public String listRooms(Model model) {

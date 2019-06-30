@@ -8,7 +8,6 @@ import mrs.domain.model.ReservableRoom;
 import mrs.domain.repository.room.MeetingRoomRepository;
 import mrs.domain.repository.room.ReservableRoomRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +16,13 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @Transactional
 public class RoomService {
-	@Autowired
-	MeetingRoomRepository meetingRoomRepository;
+	private final MeetingRoomRepository meetingRoomRepository;
+	private final ReservableRoomRepository reservableRoomRepository;
 
-	@Autowired
-	ReservableRoomRepository reservableRoomRepository;
+	public RoomService(MeetingRoomRepository meetingRoomRepository, ReservableRoomRepository reservableRoomRepository) {
+		this.meetingRoomRepository = meetingRoomRepository;
+		this.reservableRoomRepository = reservableRoomRepository;
+	}
 
 	public MeetingRoom findMeetingRoom(Integer roomId) {
 		return meetingRoomRepository.findById(roomId)
