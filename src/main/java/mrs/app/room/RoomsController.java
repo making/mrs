@@ -21,14 +21,14 @@ public class RoomsController {
 	RoomService roomService;
 
 	@GetMapping
-	String listRooms(Model model) {
+	public String listRooms(Model model) {
 		LocalDate today = LocalDate.now();
 		model.addAttribute("date", today);
 		return listRooms(today, model);
 	}
 
 	@GetMapping(path = "{date}")
-	String listRooms(
+	public String listRooms(
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
 			Model model) {
 		List<ReservableRoom> rooms = roomService.findReservableRooms(date);

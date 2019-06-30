@@ -35,7 +35,7 @@ public class ReservationsController {
 	ReservationService reservationService;
 
 	@ModelAttribute
-	ReservationForm setUpForm() {
+	public ReservationForm setUpForm() {
 		ReservationForm form = new ReservationForm();
 		// デフォルト値
 		form.setStartTime(LocalTime.of(9, 0));
@@ -44,7 +44,7 @@ public class ReservationsController {
 	}
 
 	@GetMapping
-	String reserveForm(
+	public String reserveForm(
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
 			@PathVariable("roomId") Integer roomId, Model model) {
 		ReservableRoomId reservableRoomId = new ReservableRoomId(roomId, date);
@@ -61,7 +61,7 @@ public class ReservationsController {
 	}
 
 	@PostMapping
-	String reserve(@Validated ReservationForm form, BindingResult bindingResult,
+	public String reserve(@Validated ReservationForm form, BindingResult bindingResult,
 			@AuthenticationPrincipal ReservationUserDetails userDetails,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
 			@PathVariable("roomId") Integer roomId, Model model) {
@@ -88,7 +88,7 @@ public class ReservationsController {
 	}
 
 	@PostMapping(params = "cancel")
-	String cancel(@RequestParam("reservationId") Integer reservationId,
+	public String cancel(@RequestParam("reservationId") Integer reservationId,
 			@PathVariable("roomId") Integer roomId,
 			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
 			Model model) {
