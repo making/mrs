@@ -7,10 +7,12 @@ import mrs.domain.repository.reservation.ReservationRepository;
 import mrs.domain.repository.room.ReservableRoomRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -28,7 +30,8 @@ public class ReservationService {
 	}
 
 	public Reservation findOne(Integer reservationId) {
-		return reservationRepository.findOne(reservationId);
+		return reservationRepository.findById(reservationId)
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "存在しない予約です。"));
 	}
 
 	public Reservation reserve(Reservation reservation) {

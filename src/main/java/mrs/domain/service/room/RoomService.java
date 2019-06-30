@@ -9,8 +9,10 @@ import mrs.domain.repository.room.MeetingRoomRepository;
 import mrs.domain.repository.room.ReservableRoomRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -22,7 +24,8 @@ public class RoomService {
 	ReservableRoomRepository reservableRoomRepository;
 
 	public MeetingRoom findMeetingRoom(Integer roomId) {
-		return meetingRoomRepository.findOne(roomId);
+		return meetingRoomRepository.findById(roomId)
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "存在しない会議室です。"));
 	}
 
 	public List<ReservableRoom> findReservableRooms(LocalDate date) {
