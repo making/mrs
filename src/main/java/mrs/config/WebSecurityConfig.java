@@ -15,7 +15,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/**").authenticated().and().formLogin()
             .loginPage("/loginForm").loginProcessingUrl("/login")
             .usernameParameter("username").passwordParameter("password")
-            .defaultSuccessUrl("/rooms", true).failureUrl("/loginForm?error=true")
+            .defaultSuccessUrl("/rooms").failureUrl("/loginForm?error=true")
             .permitAll();
     }
 }
