@@ -1,11 +1,10 @@
 package mrs.reservation.web;
 
-import mrs.reservation.AlreadyReservedException;
 import mrs.reservation.ReservableRoom;
 import mrs.reservation.ReservableRoomId;
 import mrs.reservation.Reservation;
+import mrs.reservation.ReservationException;
 import mrs.reservation.ReservationService;
-import mrs.reservation.UnavailableReservationException;
 import mrs.room.RoomService;
 import mrs.user.ReservationUserDetails;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -76,7 +75,7 @@ public class ReservationsController {
 
         try {
             reservationService.reserve(reservation);
-        } catch (UnavailableReservationException | AlreadyReservedException e) {
+        } catch (ReservationException e) {
             model.addAttribute("error", e.getMessage());
             return reserveForm(date, roomId, model);
         }

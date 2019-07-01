@@ -53,7 +53,7 @@ public class ReservationService {
         // 悲観ロック
         reservableRoomRepository
             .findOneForUpdateByReservableRoomId(reservableRoomId)
-            .orElseThrow(() -> new UnavailableReservationException("入力の日付・部屋の組み合わせは予約できません。"));
+            .orElseThrow(() -> new ReservationException.Unavailable("入力の日付・部屋の組み合わせは予約できません。"));
 
         // 該当の日付・部屋の全予約情報をReservableRoomテーブルから取得し、重複をチェック
         boolean overlap = reservationRepository
@@ -61,7 +61,7 @@ public class ReservationService {
                 reservableRoomId)
             .stream().anyMatch(x -> x.overlap(reservation));
         if (overlap) {
-            throw new AlreadyReservedException("入力の時間帯は既に予約済みです。");
+            throw new ReservationException.AlreadyReserved("入力の時間帯は既に予約済みです。");
         }
         // 予約情報の登録
         reservationRepository.save(reservation);
