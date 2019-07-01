@@ -14,14 +14,22 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @ConfigurationProperties(prefix = "actuator")
 public class ActuatorConfig extends WebSecurityConfigurerAdapter {
 
-    private final String username;
-
     private final String password;
+
+    private final String username;
 
 
     public ActuatorConfig(@DefaultValue("actuator") String username, @DefaultValue("actuator") String password) {
         this.username = username;
         this.password = password;
+    }
+
+    @Bean
+    public MeterFilter meterFilter() {
+        return MeterFilter.deny(id -> {
+            String uri = id.getTag("uri");
+            return uri != null && (uri.startsWith("/actuator") || uri.startsWith("/cloudfoundryapplication"));
+        });
     }
 
     @Override
@@ -41,13 +49,5 @@ public class ActuatorConfig extends WebSecurityConfigurerAdapter {
             .withUser(this.username)
             .password("{noop}" + this.password)
             .roles("ACTUATOR");
-    }
-
-    @Bean
-    public MeterFilter meterFilter() {
-        return MeterFilter.deny(id -> {
-            String uri = id.getTag("uri");
-            return uri != null && (uri.startsWith("/actuator") || uri.startsWith("/cloudfoundryapplication"));
-        });
     }
 }

@@ -8,13 +8,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/js/**", "/css/**").permitAll()
-				.antMatchers("/**").authenticated().and().formLogin()
-				.loginPage("/loginForm").loginProcessingUrl("/login")
-				.usernameParameter("username").passwordParameter("password")
-				.defaultSuccessUrl("/rooms", true).failureUrl("/loginForm?error=true")
-				.permitAll();
-	}
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers("/js/**", "/css/**").permitAll()
+            .antMatchers("/**").authenticated().and().formLogin()
+            .loginPage("/loginForm").loginProcessingUrl("/login")
+            .usernameParameter("username").passwordParameter("password")
+            .defaultSuccessUrl("/rooms", true).failureUrl("/loginForm?error=true")
+            .permitAll();
+    }
 }

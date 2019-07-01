@@ -1,66 +1,70 @@
 package mrs.room;
 
-import java.io.Serializable;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 @Entity
 public class MeetingRoom implements Serializable {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer roomId;
 
-	private String roomName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer roomId;
 
-	public Integer getRoomId() {
-		return roomId;
-	}
+    private String roomName;
 
-	public void setRoomId(Integer roomId) {
-		this.roomId = roomId;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-	public String getRoomName() {
-		return roomName;
-	}
+        MeetingRoom that = (MeetingRoom) o;
 
-	public void setRoomName(String roomName) {
-		this.roomName = roomName;
-	}
+        if (roomId != null ? !roomId.equals(that.roomId) : that.roomId != null) {
+            return false;
+        }
+        if (roomName != null ? !roomName.equals(that.roomName) : that.roomName != null) {
+            return false;
+        }
 
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("MeetingRoom{");
-		sb.append("roomId=").append(roomId);
-		sb.append(", roomName='").append(roomName).append('\'');
-		sb.append('}');
-		return sb.toString();
-	}
+        return true;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
+    public Integer getRoomId() {
+        return roomId;
+    }
 
-		MeetingRoom that = (MeetingRoom) o;
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
+    }
 
-		if (roomId != null ? !roomId.equals(that.roomId) : that.roomId != null)
-			return false;
-		if (roomName != null ? !roomName.equals(that.roomName) : that.roomName != null)
-			return false;
+    public String getRoomName() {
+        return roomName;
+    }
 
-		return true;
-	}
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
 
-	@Override
-	public int hashCode() {
-		int result = roomId != null ? roomId.hashCode() : 0;
-		result = 31 * result + (roomName != null ? roomName.hashCode() : 0);
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        int result = roomId != null ? roomId.hashCode() : 0;
+        result = 31 * result + (roomName != null ? roomName.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("MeetingRoom{");
+        sb.append("roomId=").append(roomId);
+        sb.append(", roomName='").append(roomName).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

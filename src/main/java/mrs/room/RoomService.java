@@ -9,16 +9,18 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 @Transactional
 public class RoomService {
-	private final MeetingRoomRepository meetingRoomRepository;
-	private final ReservableRoomRepository reservableRoomRepository;
 
-	public RoomService(MeetingRoomRepository meetingRoomRepository, ReservableRoomRepository reservableRoomRepository) {
-		this.meetingRoomRepository = meetingRoomRepository;
-		this.reservableRoomRepository = reservableRoomRepository;
-	}
+    private final MeetingRoomRepository meetingRoomRepository;
 
-	public MeetingRoom findMeetingRoom(Integer roomId) {
-		return meetingRoomRepository.findById(roomId)
-			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "存在しない会議室です。"));
-	}
+    private final ReservableRoomRepository reservableRoomRepository;
+
+    public RoomService(MeetingRoomRepository meetingRoomRepository, ReservableRoomRepository reservableRoomRepository) {
+        this.meetingRoomRepository = meetingRoomRepository;
+        this.reservableRoomRepository = reservableRoomRepository;
+    }
+
+    public MeetingRoom findMeetingRoom(Integer roomId) {
+        return meetingRoomRepository.findById(roomId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "存在しない会議室です。"));
+    }
 }

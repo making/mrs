@@ -6,26 +6,27 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class EndTimeMustBeAfterStartTimeValidator
-		implements ConstraintValidator<EndTimeMustBeAfterStartTime, ReservationForm> {
-	private String message;
+    implements ConstraintValidator<EndTimeMustBeAfterStartTime, ReservationForm> {
 
-	@Override
-	public void initialize(EndTimeMustBeAfterStartTime constraintAnnotation) {
-		message = constraintAnnotation.message();
-	}
+    private String message;
 
-	@Override
-	public boolean isValid(ReservationForm value, ConstraintValidatorContext context) {
-		if (value.getStartTime() == null || value.getEndTime() == null) {
-			return true;
-		}
-		boolean isEndTimeMustBeAfterStartTime = value.getEndTime()
-				.isAfter(value.getStartTime());
-		if (!isEndTimeMustBeAfterStartTime) {
-			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(message)
-					.addPropertyNode("endTime").addConstraintViolation();
-		}
-		return isEndTimeMustBeAfterStartTime;
-	}
+    @Override
+    public void initialize(EndTimeMustBeAfterStartTime constraintAnnotation) {
+        message = constraintAnnotation.message();
+    }
+
+    @Override
+    public boolean isValid(ReservationForm value, ConstraintValidatorContext context) {
+        if (value.getStartTime() == null || value.getEndTime() == null) {
+            return true;
+        }
+        boolean isEndTimeMustBeAfterStartTime = value.getEndTime()
+            .isAfter(value.getStartTime());
+        if (!isEndTimeMustBeAfterStartTime) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(message)
+                .addPropertyNode("endTime").addConstraintViolation();
+        }
+        return isEndTimeMustBeAfterStartTime;
+    }
 }

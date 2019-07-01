@@ -1,106 +1,118 @@
 package mrs.user;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "usr")
 public class User implements Serializable {
-	@Id
-	private String userId;
 
-	private String password;
+    private String firstName;
 
-	private String firstName;
+    private String lastName;
 
-	private String lastName;
+    private String password;
 
-	@Enumerated(EnumType.STRING)
-	private RoleName roleName;
+    @Enumerated(EnumType.STRING)
+    private RoleName roleName;
 
-	public String getUserId() {
-		return userId;
-	}
+    @Id
+    private String userId;
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-	public String getPassword() {
-		return password;
-	}
+        User user = (User) o;
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+        if (firstName != null ? !firstName.equals(user.firstName)
+            : user.firstName != null) {
+            return false;
+        }
+        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) {
+            return false;
+        }
+        if (password != null ? !password.equals(user.password) : user.password != null) {
+            return false;
+        }
+        if (roleName != null ? !roleName.equals(user.roleName) : user.roleName != null) {
+            return false;
+        }
+        if (userId != null ? !userId.equals(user.userId) : user.userId != null) {
+            return false;
+        }
 
-	public String getFirstName() {
-		return firstName;
-	}
+        return true;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public RoleName getRoleName() {
-		return roleName;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public void setRoleName(RoleName roleName) {
-		this.roleName = roleName;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	@Override
-	public String toString() {
-		final StringBuilder sb = new StringBuilder("User{");
-		sb.append("userId='").append(userId).append('\'');
-		sb.append(", password='").append(password).append('\'');
-		sb.append(", firstName='").append(firstName).append('\'');
-		sb.append(", lastName='").append(lastName).append('\'');
-		sb.append(", roleName='").append(roleName).append('\'');
-		sb.append('}');
-		return sb.toString();
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o)
-			return true;
-		if (o == null || getClass() != o.getClass())
-			return false;
+    public RoleName getRoleName() {
+        return roleName;
+    }
 
-		User user = (User) o;
+    public void setRoleName(RoleName roleName) {
+        this.roleName = roleName;
+    }
 
-		if (firstName != null ? !firstName.equals(user.firstName)
-				: user.firstName != null)
-			return false;
-		if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null)
-			return false;
-		if (password != null ? !password.equals(user.password) : user.password != null)
-			return false;
-		if (roleName != null ? !roleName.equals(user.roleName) : user.roleName != null)
-			return false;
-		if (userId != null ? !userId.equals(user.userId) : user.userId != null)
-			return false;
+    public String getUserId() {
+        return userId;
+    }
 
-		return true;
-	}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-	@Override
-	public int hashCode() {
-		int result = userId != null ? userId.hashCode() : 0;
-		result = 31 * result + (password != null ? password.hashCode() : 0);
-		result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-		result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-		result = 31 * result + (roleName != null ? roleName.hashCode() : 0);
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        int result = userId != null ? userId.hashCode() : 0;
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (roleName != null ? roleName.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("User{");
+        sb.append("userId='").append(userId).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", firstName='").append(firstName).append('\'');
+        sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", roleName='").append(roleName).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
