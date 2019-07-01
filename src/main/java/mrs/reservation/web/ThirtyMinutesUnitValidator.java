@@ -1,4 +1,4 @@
-package mrs.reservation.validation;
+package mrs.reservation.web;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

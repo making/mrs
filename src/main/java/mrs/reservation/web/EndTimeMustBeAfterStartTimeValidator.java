@@ -1,6 +1,4 @@
-package mrs.reservation.validation;
-
-import mrs.reservation.web.ReservationForm;
+package mrs.reservation.web;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

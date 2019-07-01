@@ -1,7 +1,5 @@
 package mrs.reservation.web;
 
-import mrs.reservation.validation.EndTimeMustBeAfterStartTime;
-import mrs.reservation.validation.ThirtyMinutesUnit;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
