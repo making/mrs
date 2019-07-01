@@ -3,34 +3,50 @@
 <head>
     <meta charset="UTF-8"/>
     <title></title>
+    <link rel="stylesheet" href="https://d2bsvk2etkq8vr.cloudfront.net/pui-css/pui-components-18.0.0.css">
+    <style>
+        #root {
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
-<h3>ログインフォーム</h3>
+<div id="root">
+    <h3>ログインフォーム</h3>
 
-<p th:if="${param.error}">
-    Error!
-</p>
-<form method="POST" th:action="@{/login}">
-    <table>
-        <tr>
-            <td><label for="username">User:</label></td>
-            <td><input id="username" name="username"
-                       type="text" value='aaaa'/>
-            </td>
-        </tr>
-        <tr>
-            <td><label for="password">Password:</label></td>
-            <td><input id="password" name="password"
-                       type="password" value="demo"/>
-            </td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>
-                <button type="submit">ログイン</button>
-            </td>
-        </tr>
-    </table>
-</form>
+    <p th:if="${param.error}">
+        <span class="type-red">Error!</span>
+    </p>
+    <form class="form" method="POST" th:action="@{/login}">
+        <fieldset>
+            <div>
+                <div class="form-unit">
+                    <div class="grid grid-nogutter label-row">
+                        <div class="col"><label for="username">Username</label></div>
+                        <div class="col col-fixed col-middle post-label"></div>
+                    </div>
+                    <div class="field-row"><input type="text" name="username" id="username" value="aaaa" class=""/></div>
+                    <div class="help-row type-gray"></div>
+                </div>
+                <div class="form-unit">
+                    <div class="grid grid-nogutter label-row">
+                        <div class="col"><label for="password">Password</label></div>
+                        <div class="col col-fixed col-middle post-label"></div>
+                    </div>
+                    <div class="field-row"><input type="password" name="password" id="password" value="demo" class=""/></div>
+                    <div class="help-row type-gray"></div>
+                </div>
+                <div class="grid">
+                    <div class="col col-fixed">
+                        <div>
+                            <button type="submit" aria-label="ログイン" class="pui-btn pui-btn--primary"><span>ログイン</span></button>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
 </body>
 </html>

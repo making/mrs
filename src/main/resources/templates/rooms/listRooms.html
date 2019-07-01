@@ -3,21 +3,29 @@
 <head>
     <meta charset="UTF-8"/>
     <title th:text="|${#temporals.format(date, 'yyyy/M/d')}の会議室|">2016/5/20の会議室</title>
+    <link rel="stylesheet" href="https://d2bsvk2etkq8vr.cloudfront.net/pui-css/pui-components-18.0.0.css">
+    <style>
+        #root {
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
-<h3>会議室</h3>
-<a th:href="@{'/rooms/' + ${date.minusDays(1)}}">&lt; 前日</a>
-<span th:text="|${#temporals.format(date, 'yyyy/M/d')}の会議室|">2016/5/20の会議室</span>
-<a th:href="@{'/rooms/' + ${date.plusDays(1)}}">翌日 &gt;</a>
+<div id="root">
+    <h3>会議室</h3>
+    <a th:href="@{'/rooms/' + ${date.minusDays(1)}}">&lt; 前日</a>
+    <span th:text="|${#temporals.format(date, 'yyyy/M/d')}の会議室|">2016/5/20の会議室</span>
+    <a th:href="@{'/rooms/' + ${date.plusDays(1)}}">翌日 &gt;</a>
 
-<ul>
-    <li th:each="room: ${rooms}">
-        <a th:href="@{'/reservations/' + ${date} + '/' + ${room.meetingRoom.roomId}}"
-           th:text="${room.meetingRoom.roomName}"></a>
-    </li>
-</ul>
-<form method="post" th:action="@{/logout}">
-    <button>ログアウト</button>
-</form>
+    <ul>
+        <li th:each="room: ${rooms}">
+            <a th:href="@{'/reservations/' + ${date} + '/' + ${room.meetingRoom.roomId}}"
+               th:text="${room.meetingRoom.roomName}"></a>
+        </li>
+    </ul>
+    <form method="post" th:action="@{/logout}">
+        <input type="submit" class="pui-btn pui-btn--default" value="ログアウト">
+    </form>
+</div>
 </body>
 </html>

@@ -4,61 +4,79 @@
 <head>
     <meta charset="UTF-8"/>
     <title th:text="|${#temporals.format(date, 'yyyy/M/d')}の${room.roomName}|">2016/5/20の豊洲</title>
+    <link rel="stylesheet" href="https://d2bsvk2etkq8vr.cloudfront.net/pui-css/pui-components-18.0.0.css">
+    <style>
+        #root {
+            padding: 20px;
+        }
+    </style>
 </head>
 <body th:with="user=${#authentication.principal.user}">
 
-<div>
-    <a th:href="@{'/rooms/' + ${date}}">会議室一覧へ</a>
+<div id="root">
+    <div>
+        <a th:href="@{'/rooms/' + ${date}}">会議室一覧へ</a>
+    </div>
+
+    <p style="color: red" th:if="${error != null}" th:text="${error}"></p>
+
+    <form method="post"
+          th:action="@{'/reservations/' + ${date}+ '/' + ${roomId}}" th:object="${reservationForm}">
+        会議室: <span th:text="${room.roomName}">豊洲</span>
+        <br/>
+        予約者名: <span th:text="${user.lastName + ' ' + user.firstName}">山田 太郎</span>
+        <br/>
+        日付: <span th:text="${#temporals.format(date, 'yyyy/M/d')}">2016/5/20</span>
+        <br/>
+        時間帯:
+        <div class="field-row">
+            <div class="grid">
+                <div class="col">
+                    <select th:field="*{startTime}">
+                        <option th:each="time : ${timeList}" th:text="${time}" th:value="${time}">09:00</option>
+                    </select>
+                    <span class="type-red" th:errors="*{startTime}" th:if="${#fields.hasErrors('startTime')}">error!</span>
+                </div>
+                <div class="col col-fixed">
+                    -
+                </div>
+                <div class="col">
+                    <select th:field="*{endTime}">
+                        <option th:each="time : ${timeList}" th:text="${time}" th:value="${time}">10:00</option>
+                    </select>
+                    <span class="type-red" th:errors="*{endTime}" th:if="${#fields.hasErrors('endTime')}">error!</span>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <button class="pui-btn pui-btn--primary">予約</button>
+    </form>
+    <br>
+    <table class="table">
+        <tr>
+            <th>時間帯</th>
+            <th>予約者</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="reservation : ${reservations}">
+            <td>
+                <span th:text="${reservation.startTime}"/>
+                -
+                <span th:text="${reservation.endTime}"/>
+            </td>
+            <td>
+                <span th:text="${reservation.user.lastName}"/>
+                <span th:text="${reservation.user.firstName}"/>
+            </td>
+            <td>
+                <form method="post" sec:authorize="${#authorization.expression('hasRole(''ADMIN'')') or #vars.user.userId == #vars.reservation.user.userId}"
+                      th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}">
+                    <input name="reservationId" th:value="${reservation.reservationId}" type="hidden"/>
+                    <input name="cancel" type="submit" class="pui-btn pui-btn--danger" value="取消"/>
+                </form>
+            </td>
+        </tr>
+    </table>
 </div>
-
-<p style="color: red" th:if="${error != null}" th:text="${error}"></p>
-
-<form method="post"
-      th:action="@{'/reservations/' + ${date}+ '/' + ${roomId}}" th:object="${reservationForm}">
-    会議室: <span th:text="${room.roomName}">豊洲</span>
-    <br/>
-    予約者名: <span th:text="${user.lastName + ' ' + user.firstName}">山田 太郎</span>
-    <br/>
-    日付: <span th:text="${#temporals.format(date, 'yyyy/M/d')}">2016/5/20</span>
-    <br/>
-    時間帯:
-    <select th:field="*{startTime}">
-        <option th:each="time : ${timeList}" th:text="${time}" th:value="${time}">09:00</option>
-    </select>
-    <span style="color:red" th:errors="*{startTime}" th:if="${#fields.hasErrors('startTime')}">error!</span>
-    -
-    <select th:field="*{endTime}">
-        <option th:each="time : ${timeList}" th:text="${time}" th:value="${time}">10:00</option>
-    </select>
-    <span style="color:red" th:errors="*{endTime}" th:if="${#fields.hasErrors('endTime')}">error!</span>
-    <br/>
-    <button>予約</button>
-</form>
-
-<table>
-    <tr>
-        <th>時間帯</th>
-        <th>予約者</th>
-        <th>操作</th>
-    </tr>
-    <tr th:each="reservation : ${reservations}">
-        <td>
-            <span th:text="${reservation.startTime}"/>
-            -
-            <span th:text="${reservation.endTime}"/>
-        </td>
-        <td>
-            <span th:text="${reservation.user.lastName}"/>
-            <span th:text="${reservation.user.firstName}"/>
-        </td>
-        <td>
-            <form method="post" sec:authorize="${#authorization.expression('hasRole(''ADMIN'')') or #vars.user.userId == #vars.reservation.user.userId}"
-                  th:action="@{'/reservations/' + ${date} + '/' + ${roomId}}">
-                <input name="reservationId" th:value="${reservation.reservationId}" type="hidden"/>
-                <input name="cancel" type="submit" value="取消"/>
-            </form>
-        </td>
-    </tr>
-</table>
 </body>
 </html>
