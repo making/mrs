@@ -21,6 +21,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+        <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
     </properties>
 
     <dependencies>
@@ -49,6 +50,46 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+            <exclusions>
+                <!-- Exclude unused dependencies -->
+                <exclusion>
+                    <groupId>io.zipkin.reporter2</groupId>
+                    <artifactId>zipkin-sender-kafka</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.zipkin.reporter2</groupId>
+                    <artifactId>zipkin-sender-amqp-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.zipkin.brave</groupId>
+                    <artifactId>brave-instrumentation-spring-rabbit</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.zipkin.brave</groupId>
+                    <artifactId>brave-instrumentation-httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.zipkin.brave</groupId>
+                    <artifactId>brave-instrumentation-httpasyncclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.zipkin.brave</groupId>
+                    <artifactId>brave-instrumentation-jms</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.zipkin.brave</groupId>
+                    <artifactId>brave-instrumentation-kafka-clients</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.zipkin.brave</groupId>
+            <artifactId>brave-instrumentation-mysql</artifactId>
+            <version>5.6.5</version>
+        </dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
@@ -73,7 +114,17 @@
             <artifactId>spring-boot-devtools</artifactId>
         </dependency>
     </dependencies>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <build>
         <plugins>
             <plugin>
