@@ -47,8 +47,8 @@ public class ReservationsController {
                          Model model) {
 
         try {
-            Reservation reservation = reservationService.findOne(reservationId);
-            reservationService.cancel(reservation);
+            Reservation reservation = this.reservationService.findOne(reservationId);
+            this.reservationService.cancel(reservation);
         } catch (AccessDeniedException e) {
             model.addAttribute("error", e.getMessage());
             return reserveForm(date, roomId, model);
@@ -74,7 +74,7 @@ public class ReservationsController {
         reservation.setUser(userDetails.getUser());
 
         try {
-            reservationService.reserve(reservation);
+            this.reservationService.reserve(reservation);
         } catch (ReservationException e) {
             model.addAttribute("error", e.getMessage());
             return reserveForm(date, roomId, model);
@@ -87,7 +87,7 @@ public class ReservationsController {
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
         @PathVariable("roomId") Integer roomId, Model model) {
         ReservableRoomId reservableRoomId = new ReservableRoomId(roomId, date);
-        List<Reservation> reservations = reservationService
+        List<Reservation> reservations = this.reservationService
             .findReservations(reservableRoomId);
 
         LocalTime baseTime = LocalTime.of(0, 0);

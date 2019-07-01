@@ -20,7 +20,7 @@ public class RoomService {
     }
 
     public MeetingRoom findMeetingRoom(Integer roomId) {
-        return meetingRoomRepository.findById(roomId)
+        return this.meetingRoomRepository.findById(roomId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "存在しない会議室です。"));
     }
 }

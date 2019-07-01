@@ -31,7 +31,7 @@ public class RoomsController {
     public String listRooms(
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
         Model model) {
-        List<ReservableRoom> rooms = reservationService.findReservableRooms(date);
+        List<ReservableRoom> rooms = this.reservationService.findReservableRooms(date);
         model.addAttribute("rooms", rooms);
         return "rooms/listRooms";
     }

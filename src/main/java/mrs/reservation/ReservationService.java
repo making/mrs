@@ -27,22 +27,22 @@ public class ReservationService {
     // ADMINロールの場合は全予約取り消し可能
     @PreAuthorize("hasRole('ADMIN') or #reservation.user.userId == principal.user.userId")
     public void cancel(@P("reservation") Reservation reservation) {
-        reservationRepository.delete(reservation);
+        this.reservationRepository.delete(reservation);
     }
 
     public Reservation findOne(Integer reservationId) {
-        return reservationRepository.findById(reservationId)
+        return this.reservationRepository.findById(reservationId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "存在しない予約です。"));
     }
 
     public List<ReservableRoom> findReservableRooms(LocalDate date) {
-        return reservableRoomRepository
+        return this.reservableRoomRepository
             .findByReservableRoomId_reservedDateOrderByReservableRoomId_roomIdAsc(
                 date);
     }
 
     public List<Reservation> findReservations(ReservableRoomId reservableRoomId) {
-        return reservationRepository
+        return this.reservationRepository
             .findByReservableRoom_ReservableRoomIdOrderByStartTimeAsc(
                 reservableRoomId);
     }
@@ -51,12 +51,12 @@ public class ReservationService {
         ReservableRoomId reservableRoomId = reservation.getReservableRoom()
             .getReservableRoomId();
         // 悲観ロック
-        reservableRoomRepository
+        this.reservableRoomRepository
             .findOneForUpdateByReservableRoomId(reservableRoomId)
             .orElseThrow(() -> new ReservationException.Unavailable("入力の日付・部屋の組み合わせは予約できません。"));
 
         // 該当の日付・部屋の全予約情報をReservableRoomテーブルから取得し、重複をチェック
-        boolean overlap = reservationRepository
+        boolean overlap = this.reservationRepository
             .findByReservableRoom_ReservableRoomIdOrderByStartTimeAsc(
                 reservableRoomId)
             .stream().anyMatch(x -> x.overlap(reservation));
@@ -64,7 +64,7 @@ public class ReservationService {
             throw new ReservationException.AlreadyReserved("入力の時間帯は既に予約済みです。");
         }
         // 予約情報の登録
-        reservationRepository.save(reservation);
+        this.reservationRepository.save(reservation);
         return reservation;
     }
 }
