@@ -3,3 +3,6 @@ applications:
   path: target/mrs-0.0.1-SNAPSHOT.jar
   services:
   - mrs-db # cf create-service p.mysql db-small mrs-db
+  env:
+    JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
+    SPRING_PROFILES_ACTIVE: cloud
