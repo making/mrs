@@ -51,11 +51,10 @@ public class ReservationService {
         ReservableRoomId reservableRoomId = reservation.getReservableRoom()
             .getReservableRoomId();
         // 悲観ロック
-        ReservableRoom reservable = reservableRoomRepository
-            .findOneForUpdateByReservableRoomId(reservableRoomId);
-        if (reservable == null) {
-            throw new UnavailableReservationException("入力の日付・部屋の組み合わせは予約できません。");
-        }
+        reservableRoomRepository
+            .findOneForUpdateByReservableRoomId(reservableRoomId)
+            .orElseThrow(() -> new UnavailableReservationException("入力の日付・部屋の組み合わせは予約できません。"));
+
         // 該当の日付・部屋の全予約情報をReservableRoomテーブルから取得し、重複をチェック
         boolean overlap = reservationRepository
             .findByReservableRoom_ReservableRoomIdOrderByStartTimeAsc(

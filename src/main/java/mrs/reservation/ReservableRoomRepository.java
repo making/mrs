@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Lock;
 import javax.persistence.LockModeType;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface ReservableRoomRepository
     extends JpaRepository<ReservableRoom, ReservableRoomId> {
@@ -14,5 +15,5 @@ public interface ReservableRoomRepository
         LocalDate reservedDate);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    ReservableRoom findOneForUpdateByReservableRoomId(ReservableRoomId reservableRoomId);
+    Optional<ReservableRoom> findOneForUpdateByReservableRoomId(ReservableRoomId reservableRoomId);
 }
