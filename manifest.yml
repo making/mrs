@@ -1,8 +1,13 @@
 applications:
 - name: mrs
   path: target/mrs-0.0.1-SNAPSHOT.jar
+  buildpacks:
+  - https://github.com/DataDog/datadog-cloudfoundry-buildpack/releases/download/4.10.0/datadog-cloudfoundry-buildpack.zip
+  - java_buildpack_offline
   services:
   - mrs-db # cf create-service p.mysql db-small mrs-db
   env:
+    JBP_CONFIG_OPEN_JDK_JRE: '[jre: {version: 11.+}]'
+    # DD_API_KEY: ..... # cf set-env mrs DD_API_KEY xxxxxxxxxxxxxxx
     JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
     SPRING_PROFILES_ACTIVE: cloud
