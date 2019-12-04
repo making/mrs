@@ -2,6 +2,7 @@ package mrs.config;
 
 import io.micrometer.core.instrument.config.MeterFilter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
@@ -12,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Order(-100)
 @ConfigurationProperties(prefix = "actuator")
+@ConstructorBinding
 public class ActuatorConfig extends WebSecurityConfigurerAdapter {
 
     private final String password;
