@@ -2,22 +2,13 @@ package mrs.reservation;
 
 import mrs.room.MeetingRoom;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import java.io.Serializable;
 
-@Entity
+
 public class ReservableRoom implements Serializable {
 
-    @ManyToOne
-    @MapsId("roomId")
-    @JoinColumn(name = "room_id", insertable = false, updatable = false)
     private MeetingRoom meetingRoom;
 
-    @EmbeddedId
     private ReservableRoomId reservableRoomId;
 
     public ReservableRoom() {
@@ -49,6 +40,10 @@ public class ReservableRoom implements Serializable {
 
     public MeetingRoom getMeetingRoom() {
         return meetingRoom;
+    }
+
+    public void setMeetingRoom(MeetingRoom meetingRoom) {
+        this.meetingRoom = meetingRoom;
     }
 
     public ReservableRoomId getReservableRoomId() {

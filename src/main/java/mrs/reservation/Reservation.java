@@ -2,33 +2,19 @@ package mrs.reservation;
 
 import mrs.user.User;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
 import java.time.LocalTime;
 import java.util.Objects;
 
-@Entity
 public class Reservation {
 
     private LocalTime endTime;
 
-    @ManyToOne
-    @JoinColumns({@JoinColumn(name = "reserved_date"), @JoinColumn(name = "room_id")})
     private ReservableRoom reservableRoom;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer reservationId;
 
     private LocalTime startTime;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
     @Override

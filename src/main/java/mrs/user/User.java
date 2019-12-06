@@ -1,14 +1,7 @@
 package mrs.user;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "usr")
 public class User implements Serializable {
 
     private String firstName;
@@ -17,10 +10,8 @@ public class User implements Serializable {
 
     private String password;
 
-    @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
-    @Id
     private String userId;
 
     @Override

@@ -1,10 +1,8 @@
 package mrs.reservation;
 
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Embeddable
 public class ReservableRoomId implements Serializable {
 
     private LocalDate reservedDate;
