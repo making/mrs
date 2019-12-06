@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-@Transactional
 public class ReservationService {
 
     private final ReservableRoomRepository reservableRoomRepository;
@@ -25,6 +24,7 @@ public class ReservationService {
 
     // USERロールの場合は予約者がログインユーザーの場合に取り消し可能
     // ADMINロールの場合は全予約取り消し可能
+    @Transactional
     @PreAuthorize("hasRole('ADMIN') or #reservation.user.userId == principal.user.userId")
     public void cancel(@P("reservation") Reservation reservation) {
         this.reservationRepository.delete(reservation);
@@ -47,6 +47,7 @@ public class ReservationService {
                 reservableRoomId);
     }
 
+    @Transactional
     public Reservation reserve(Reservation reservation) {
         ReservableRoomId reservableRoomId = reservation.getReservableRoom()
             .getReservableRoomId();
