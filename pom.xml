@@ -107,7 +107,7 @@
         <dependency>
             <groupId>io.zipkin.brave</groupId>
             <artifactId>brave-instrumentation-mysql8</artifactId>
-            <version>5.9.0</version>
+            <version>5.10.2</version>
         </dependency>
         <dependency>
             <groupId>io.pivotal.cfenv</groupId>
