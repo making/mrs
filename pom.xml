@@ -138,8 +138,16 @@
 			<artifactId>wavefront-spring-boot-starter</artifactId>
 			<exclusions>
 				<exclusion>
-					<groupId>com.wavefront</groupId>
-					<artifactId>wavefront-opentracing-sdk-java</artifactId>
+					<groupId>io.opentracing</groupId>
+					<artifactId>opentracing-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.opentracing</groupId>
+					<artifactId>opentracing-util</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.code.findbugs</groupId>
+					<artifactId>jsr305</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
