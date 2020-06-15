@@ -136,6 +136,12 @@
 		<dependency>
 			<groupId>com.wavefront</groupId>
 			<artifactId>wavefront-spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.wavefront</groupId>
+					<artifactId>wavefront-opentracing-sdk-java</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
