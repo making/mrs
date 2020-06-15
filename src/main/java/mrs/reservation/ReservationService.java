@@ -40,14 +40,14 @@ public class ReservationService {
     }
 
 	@NewSpan
-    public List<ReservableRoom> findReservableRooms(@SpanTag LocalDate date) {
+    public List<ReservableRoom> findReservableRooms(@SpanTag(key = "date") LocalDate date) {
         return this.reservableRoomRepository
             .findByReservableRoomId_reservedDateOrderByReservableRoomId_roomIdAsc(
                 date);
     }
 
     @NewSpan
-    public List<Reservation> findReservations(@SpanTag ReservableRoomId reservableRoomId) {
+    public List<Reservation> findReservations(@SpanTag(key = "reservableRoomId") ReservableRoomId reservableRoomId) {
         return this.reservationRepository
             .findByReservableRoom_ReservableRoomIdOrderByStartTimeAsc(
                 reservableRoomId);

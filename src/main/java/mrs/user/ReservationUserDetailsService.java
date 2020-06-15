@@ -18,7 +18,7 @@ public class ReservationUserDetailsService implements UserDetailsService {
 
     @Override
 	@NewSpan
-    public UserDetails loadUserByUsername(@SpanTag String username)
+    public UserDetails loadUserByUsername(@SpanTag(key = "username") String username)
         throws UsernameNotFoundException {
         User user = this.userRepository.findById(username)
             .orElseThrow(() -> new UsernameNotFoundException(username + " is not found."));

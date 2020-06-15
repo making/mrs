@@ -16,7 +16,7 @@ public class RoomService {
     }
 
     @NewSpan
-    public MeetingRoom findMeetingRoom(@SpanTag Integer roomId) {
+    public MeetingRoom findMeetingRoom(@SpanTag(key = "roomId") Integer roomId) {
         return this.meetingRoomRepository.findById(roomId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "存在しない会議室です。"));
     }
