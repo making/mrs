@@ -1,0 +1,47 @@
+name: CI
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '11.x'
+    - uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - name: mvn test
+      run: |
+        set -e
+        ./mvnw -V test
+    - name: mvn package
+      if: github.ref == 'refs/heads/master'
+      run: |
+        set -e
+        ./mvnw -V package -Dmaven.test.skip=true
+    - name: cf push
+      if: github.ref == 'refs/heads/master'
+      env:
+        CF_CLI_VERSION: 7.0.0-beta.30
+        CF_API: ${{ secrets.CF_API }}
+        CF_USERNAME: ${{ secrets.CF_USERNAME }}
+        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+        CF_ORG: ${{ secrets.CF_ORG }}
+        CF_SPACE: ${{ secrets.CF_SPACE }}
+      run: |
+        set -e
+        wget -q "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=${CF_CLI_VERSION}&source=github-rel" -O cf.tgz
+        tar xzf cf.tgz
+        rm -f LICENSE NOTICE cf.tgz
+        ./cf7 login -a ${CF_API} -u ${CF_USERNAME} -p ${CF_PASSWORD} -o ${CF_ORG} -s ${CF_SPACE}
+        ./cf7 push --strategy rolling --var push="$(date)"
