@@ -1,5 +1,7 @@
 package mrs.reservation;
 
+import org.springframework.cloud.sleuth.annotation.NewSpan;
+import org.springframework.cloud.sleuth.annotation.SpanTag;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
@@ -26,28 +28,33 @@ public class ReservationService {
     // ADMINロールの場合は全予約取り消し可能
     @Transactional
     @PreAuthorize("hasRole('ADMIN') or #reservation.user.userId == principal.user.userId")
+	@NewSpan
     public void cancel(@P("reservation") Reservation reservation) {
         this.reservationRepository.delete(reservation);
     }
 
-    public Reservation findOne(Integer reservationId) {
+	@NewSpan
+    public Reservation findOne(@SpanTag Integer reservationId) {
         return this.reservationRepository.findById(reservationId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "存在しない予約です。"));
     }
 
-    public List<ReservableRoom> findReservableRooms(LocalDate date) {
+	@NewSpan
+    public List<ReservableRoom> findReservableRooms(@SpanTag LocalDate date) {
         return this.reservableRoomRepository
             .findByReservableRoomId_reservedDateOrderByReservableRoomId_roomIdAsc(
                 date);
     }
 
-    public List<Reservation> findReservations(ReservableRoomId reservableRoomId) {
+    @NewSpan
+    public List<Reservation> findReservations(@SpanTag ReservableRoomId reservableRoomId) {
         return this.reservationRepository
             .findByReservableRoom_ReservableRoomIdOrderByStartTimeAsc(
                 reservableRoomId);
     }
 
     @Transactional
+	@NewSpan
     public Reservation reserve(Reservation reservation) {
         ReservableRoomId reservableRoomId = reservation.getReservableRoom()
             .getReservableRoomId();
