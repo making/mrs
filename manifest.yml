@@ -4,7 +4,7 @@ applications:
   memory: 256M
   services:
   - mrs-db # cf create-service p.mysql db-small mrs-db
-  - syslog-to-datadog
+#  - syslog-to-datadog
   env:
     JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
     SPRING_PROFILES_ACTIVE: cloud

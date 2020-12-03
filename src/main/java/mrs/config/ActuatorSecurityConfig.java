@@ -19,7 +19,8 @@ public class ActuatorSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.mvcMatcher("/actuator/prometheus").authorizeRequests()
+		http.mvcMatcher("/actuator/*").authorizeRequests()
+				.mvcMatchers("/actuator/startup").permitAll()
 				.mvcMatchers("/actuator/prometheus").hasRole("ACTUATOR")
 				.and()
 				.httpBasic()
