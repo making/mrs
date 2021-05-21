@@ -1,14 +1,15 @@
 package mrs.reservation;
 
+import java.util.List;
+import java.util.Optional;
+
 import mrs.room.MeetingRoom;
 import mrs.user.RoleName;
 import mrs.user.User;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class ReservationRepository {
@@ -22,24 +23,23 @@ public class ReservationRepository {
     public Optional<Reservation> findById(Integer reservationId) {
         try {
             return Optional.ofNullable(this.jdbcTemplate.queryForObject("SELECT r.reservation_id, r.start_time, r.end_time, r.reserved_date, r.room_id, r.user_id " +
-                    "FROM reservation r WHERE r.reservation_id = ?"
-                , (rs, i) -> {
-                    final Reservation reservation = new Reservation();
-                    final ReservableRoom reservableRoom = new ReservableRoom();
-                    final ReservableRoomId id = new ReservableRoomId();
-                    final User user = new User();
-                    reservation.setReservableRoom(reservableRoom);
-                    reservation.setReservationId(rs.getInt("reservation_id"));
-                    reservation.setStartTime(rs.getTime("start_time").toLocalTime());
-                    reservation.setEndTime(rs.getTime("end_time").toLocalTime());
-                    reservation.setUser(user);
-                    reservableRoom.setReservableRoomId(id);
-                    id.setReservedDate(rs.getDate("reserved_date").toLocalDate());
-                    id.setRoomId(rs.getInt("room_id"));
-                    user.setUserId(rs.getString("user_id"));
-                    return reservation;
-                }, reservationId));
-        } catch (EmptyResultDataAccessException e) {
+                            "FROM reservation r WHERE r.reservation_id = ?"
+                    , (rs, i) -> {
+                        final ReservableRoom reservableRoom = new ReservableRoom();
+                        final ReservableRoomId id = new ReservableRoomId();
+                        final User user = new User();
+                        reservableRoom.setReservableRoomId(id);
+                        id.setReservedDate(rs.getDate("reserved_date").toLocalDate());
+                        id.setRoomId(rs.getInt("room_id"));
+                        user.setUserId(rs.getString("user_id"));
+                        return new Reservation(reservationId,
+                                rs.getTime("start_time").toLocalTime(),
+                                rs.getTime("end_time").toLocalTime(),
+                                reservableRoom,
+                                user);
+                    }, reservationId));
+        }
+        catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
@@ -52,17 +52,11 @@ public class ReservationRepository {
             "INNER JOIN meeting_room mr ON r.room_id = mr.room_id " +
             "INNER JOIN usr u ON r.user_id = u.user_id " +
             "WHERE rr.reserved_date = ? AND rr.room_id = ? ORDER BY r.start_time", (rs, i) -> {
-            final Reservation reservation = new Reservation();
             final ReservableRoom reservableRoom = new ReservableRoom();
             final ReservableRoomId id = new ReservableRoomId();
             final MeetingRoom meetingRoom = new MeetingRoom();
             final User user = new User();
             final int roomId = rs.getInt("room_id");
-            reservation.setReservableRoom(reservableRoom);
-            reservation.setUser(user);
-            reservation.setReservationId(rs.getInt("reservation_id"));
-            reservation.setStartTime(rs.getTime("start_time").toLocalTime());
-            reservation.setEndTime(rs.getTime("end_time").toLocalTime());
             reservableRoom.setMeetingRoom(meetingRoom);
             reservableRoom.setReservableRoomId(id);
             id.setReservedDate(rs.getDate("reserved_date").toLocalDate());
@@ -74,7 +68,11 @@ public class ReservationRepository {
             user.setLastName(rs.getString("last_name"));
             user.setPassword(rs.getString("password"));
             user.setRoleName(RoleName.valueOf(rs.getString("role_name")));
-            return reservation;
+            return new Reservation(rs.getInt("reservation_id"),
+					rs.getTime("start_time").toLocalTime(),
+					rs.getTime("end_time").toLocalTime(),
+					reservableRoom,
+					user);
         }, reservableRoomId.getReservedDate(), reservableRoomId.getRoomId());
     }
 

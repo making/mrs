@@ -1,21 +1,19 @@
 package mrs.reservation.web;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalTime;
 
-@EndTimeMustBeAfterStartTime(message = "終了時刻は開始時刻より後にしてください")
-public class ReservationForm implements Serializable {
+import am.ik.yavi.core.Validated;
+import mrs.reservation.ReservableRoom;
+import mrs.reservation.Reservation;
+import mrs.user.User;
 
-    @NotNull(message = "必須です")
-    @ThirtyMinutesUnit(message = "30分単位で入力してください")
+import org.springframework.format.annotation.DateTimeFormat;
+
+public class ReservationForm implements Serializable {
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime endTime;
 
-    @NotNull(message = "必須です")
-    @ThirtyMinutesUnit(message = "30分単位で入力してください")
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime startTime;
 
@@ -33,5 +31,9 @@ public class ReservationForm implements Serializable {
 
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
+    }
+
+    public Validated<Reservation> toReservation(Integer reservationId, ReservableRoom reservableRoom, User user) {
+        return Reservation.of(reservationId, this.startTime, this.endTime, reservableRoom, user);
     }
 }

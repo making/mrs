@@ -1,103 +1,69 @@
 package mrs.reservation;
 
-import mrs.user.User;
-
 import java.time.LocalTime;
 import java.util.Objects;
 
+import am.ik.yavi.builder.ValidatorBuilder;
+import am.ik.yavi.core.Validated;
+import am.ik.yavi.core.Validator;
+import mrs.user.User;
+
 public class Reservation {
+    private final Integer reservationId;
 
-    private LocalTime endTime;
+    private final LocalTime startTime;
 
-    private ReservableRoom reservableRoom;
+    private final LocalTime endTime;
 
-    private Integer reservationId;
+    private final ReservableRoom reservableRoom;
 
-    private LocalTime startTime;
+    private final User user;
 
-    private User user;
+    private static Validator<Reservation> validator = ValidatorBuilder.<Reservation>of()
+            .constraintOnObject(Reservation::getStartTime, "startTime",
+                    c -> c.notNull().message("必須です")
+                            .predicate(ThirtyMinutesUnitConstraints.INSTANCE))
+            .constraintOnObject(Reservation::getEndTime, "endTime",
+                    c -> c.notNull().message("必須です")
+                            .predicate(ThirtyMinutesUnitConstraints.INSTANCE))
+            .constraintOnObject(Reservation::getUser, "user",
+                    c -> c.notNull().message("必須です"))
+            .constraintOnObject(Reservation::getUser, "user",
+                    c -> c.notNull().message("必須です"))
+            .constraintOnTarget(EndTimeMustBeAfterStartTimeConstraint.INSTANCE, "endTime")
+            .build();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
 
-        Reservation that = (Reservation) o;
-
-        if (endTime != null ? !endTime.equals(that.endTime) : that.endTime != null) {
-            return false;
-        }
-        if (reservableRoom != null ? !reservableRoom.equals(that.reservableRoom)
-            : that.reservableRoom != null) {
-            return false;
-        }
-        if (reservationId != null ? !reservationId.equals(that.reservationId)
-            : that.reservationId != null) {
-            return false;
-        }
-        if (startTime != null ? !startTime.equals(that.startTime)
-            : that.startTime != null) {
-            return false;
-        }
-        if (user != null ? !user.equals(that.user) : that.user != null) {
-            return false;
-        }
-
-        return true;
+    public static Validated<Reservation> of(Integer reservationId, LocalTime startTime, LocalTime endTime, ReservableRoom reservableRoom, User user) {
+        return validator.applicative().validate(new Reservation(reservationId, startTime, endTime, reservableRoom, user));
     }
 
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
+    public Reservation(Integer reservationId, LocalTime startTime, LocalTime endTime, ReservableRoom reservableRoom, User user) {
+        this.reservationId = reservationId;
+        this.startTime = startTime;
         this.endTime = endTime;
-    }
-
-    public ReservableRoom getReservableRoom() {
-        return reservableRoom;
-    }
-
-    public void setReservableRoom(ReservableRoom reservableRoom) {
         this.reservableRoom = reservableRoom;
+        this.user = user;
     }
 
     public Integer getReservationId() {
         return reservationId;
     }
 
-    public void setReservationId(Integer reservationId) {
-        this.reservationId = reservationId;
-    }
-
     public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public ReservableRoom getReservableRoom() {
+        return reservableRoom;
     }
 
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = reservationId != null ? reservationId.hashCode() : 0;
-        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
-        result = 31 * result + (reservableRoom != null ? reservableRoom.hashCode() : 0);
-        result = 31 * result + (user != null ? user.hashCode() : 0);
-        return result;
     }
 
     public boolean overlap(Reservation target) {

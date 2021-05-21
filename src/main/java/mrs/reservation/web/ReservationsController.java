@@ -1,5 +1,6 @@
 package mrs.reservation.web;
 
+import am.ik.yavi.core.Validated;
 import mrs.reservation.ReservableRoom;
 import mrs.reservation.ReservableRoomId;
 import mrs.reservation.Reservation;
@@ -13,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +26,8 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("reservations/{date}/{roomId}")
@@ -57,7 +59,7 @@ public class ReservationsController {
     }
 
     @PostMapping
-    public String reserve(@Validated ReservationForm form, BindingResult bindingResult,
+    public String reserve(@Valid ReservationForm form, BindingResult bindingResult,
                           @AuthenticationPrincipal ReservationUserDetails userDetails,
                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
                           @PathVariable("roomId") Integer roomId, Model model) {
@@ -67,14 +69,14 @@ public class ReservationsController {
 
         ReservableRoom reservableRoom = new ReservableRoom(
             new ReservableRoomId(roomId, date));
-        Reservation reservation = new Reservation();
-        reservation.setStartTime(form.getStartTime());
-        reservation.setEndTime(form.getEndTime());
-        reservation.setReservableRoom(reservableRoom);
-        reservation.setUser(userDetails.getUser());
-
-        try {
-            this.reservationService.reserve(reservation);
+		Validated<Reservation> reservationValidated = form.toReservation(null, reservableRoom, userDetails.getUser());
+		if (!reservationValidated.isValid()) {
+			reservationValidated.errors().apply(bindingResult::rejectValue);
+			return reserveForm(date, roomId, model);
+		}
+		try {
+			Reservation reservation = reservationValidated.value();
+			this.reservationService.reserve(reservation);
         } catch (ReservationException e) {
             model.addAttribute("error", e.getMessage());
             return reserveForm(date, roomId, model);
