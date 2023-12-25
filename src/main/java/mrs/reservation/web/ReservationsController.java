@@ -43,9 +43,9 @@ public class ReservationsController {
     }
 
     @PostMapping(params = "cancel")
-    public String cancel(@RequestParam("reservationId") Integer reservationId,
-                         @PathVariable("roomId") Integer roomId,
-                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
+    public String cancel(@RequestParam Integer reservationId,
+                         @PathVariable Integer roomId,
+                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date,
                          Model model) {
 
         try {
@@ -61,8 +61,8 @@ public class ReservationsController {
     @PostMapping
     public String reserve(@Valid ReservationForm form, BindingResult bindingResult,
                           @AuthenticationPrincipal ReservationUserDetails userDetails,
-                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
-                          @PathVariable("roomId") Integer roomId, Model model) {
+                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date,
+                          @PathVariable Integer roomId, Model model) {
         if (bindingResult.hasErrors()) {
             return reserveForm(date, roomId, model);
         }
@@ -86,8 +86,8 @@ public class ReservationsController {
 
     @GetMapping
     public String reserveForm(
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
-        @PathVariable("roomId") Integer roomId, Model model) {
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date,
+        @PathVariable Integer roomId, Model model) {
         ReservableRoomId reservableRoomId = new ReservableRoomId(roomId, date);
         List<Reservation> reservations = this.reservationService
             .findReservations(reservableRoomId);

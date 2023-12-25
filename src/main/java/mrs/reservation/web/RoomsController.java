@@ -29,7 +29,7 @@ public class RoomsController {
 
     @GetMapping(path = "rooms/{date}")
     public String listRooms(
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable("date") LocalDate date,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date,
         Model model) {
         List<ReservableRoom> rooms = this.reservationService.findReservableRooms(date);
         model.addAttribute("rooms", rooms);

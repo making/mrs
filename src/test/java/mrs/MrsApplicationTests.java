@@ -2,10 +2,10 @@ package mrs;
 
 import org.junit.jupiter.api.Test;
 
-public class MrsApplicationTests {
+class MrsApplicationTests {
 
-	@Test
-	public void contextLoads() {
+    @Test
+    void contextLoads() {
 	}
 
 }
