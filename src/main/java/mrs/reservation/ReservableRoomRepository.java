@@ -36,8 +36,10 @@ public class ReservableRoomRepository {
 
     public Optional<ReservableRoom> findOneForUpdateByReservableRoomId(ReservableRoomId reservableRoomId) {
         try {
-            return Optional.ofNullable(this.jdbcTemplate.queryForObject("SELECT mr.room_id, mr.room_name, rr.reserved_date FROM meeting_room AS mr, reservable_room AS rr " +
-                    "WHERE rr.reserved_date = ? AND rr.room_id = ? AND rr.room_id = mr.room_id FOR UPDATE"
+            return Optional.ofNullable(this.jdbcTemplate.queryForObject("""
+                    SELECT mr.room_id, mr.room_name, rr.reserved_date FROM meeting_room AS mr, reservable_room AS rr \
+                    WHERE rr.reserved_date = ? AND rr.room_id = ? AND rr.room_id = mr.room_id FOR UPDATE\
+                    """
                 , rowMapper, reservableRoomId.getReservedDate(), reservableRoomId.getRoomId()));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -45,8 +47,10 @@ public class ReservableRoomRepository {
     }
 
     public List<ReservableRoom> findByReservableRoomId_reservedDateOrderByReservableRoomId_roomIdAsc(LocalDate reservedDate) {
-        return this.jdbcTemplate.query("SELECT mr.room_id, mr.room_name, rr.reserved_date FROM meeting_room AS mr, reservable_room AS rr " +
-            "WHERE rr.reserved_date = ? AND mr.room_id = rr.room_id " +
-            "ORDER BY room_id", rowMapper, reservedDate);
+        return this.jdbcTemplate.query("""
+            SELECT mr.room_id, mr.room_name, rr.reserved_date FROM meeting_room AS mr, reservable_room AS rr \
+            WHERE rr.reserved_date = ? AND mr.room_id = rr.room_id \
+            ORDER BY room_id\
+            """, rowMapper, reservedDate);
     }
 }

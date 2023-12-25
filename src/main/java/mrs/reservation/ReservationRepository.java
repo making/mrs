@@ -22,8 +22,10 @@ public class ReservationRepository {
 
     public Optional<Reservation> findById(Integer reservationId) {
         try {
-            return Optional.ofNullable(this.jdbcTemplate.queryForObject("SELECT r.reservation_id, r.start_time, r.end_time, r.reserved_date, r.room_id, r.user_id " +
-                            "FROM reservation r WHERE r.reservation_id = ?"
+            return Optional.ofNullable(this.jdbcTemplate.queryForObject("""
+                            SELECT r.reservation_id, r.start_time, r.end_time, r.reserved_date, r.room_id, r.user_id \
+                            FROM reservation r WHERE r.reservation_id = ?\
+                            """
                     , (rs, i) -> {
                         final ReservableRoom reservableRoom = new ReservableRoom();
                         final ReservableRoomId id = new ReservableRoomId();
@@ -46,12 +48,14 @@ public class ReservationRepository {
 
     public List<Reservation> findByReservableRoom_ReservableRoomIdOrderByStartTimeAsc(
         ReservableRoomId reservableRoomId) {
-        return this.jdbcTemplate.query("SELECT r.reservation_id, r.start_time, r.end_time, r.reserved_date, r.room_id, r.user_id, mr.room_name, u.first_name, u.last_name, u.password, u.role_name " +
-            "FROM reservation r " +
-            "INNER JOIN reservable_room rr ON r.reserved_date = rr.reserved_date AND r.room_id = rr.room_id " +
-            "INNER JOIN meeting_room mr ON r.room_id = mr.room_id " +
-            "INNER JOIN usr u ON r.user_id = u.user_id " +
-            "WHERE rr.reserved_date = ? AND rr.room_id = ? ORDER BY r.start_time", (rs, i) -> {
+        return this.jdbcTemplate.query("""
+            SELECT r.reservation_id, r.start_time, r.end_time, r.reserved_date, r.room_id, r.user_id, mr.room_name, u.first_name, u.last_name, u.password, u.role_name \
+            FROM reservation r \
+            INNER JOIN reservable_room rr ON r.reserved_date = rr.reserved_date AND r.room_id = rr.room_id \
+            INNER JOIN meeting_room mr ON r.room_id = mr.room_id \
+            INNER JOIN usr u ON r.user_id = u.user_id \
+            WHERE rr.reserved_date = ? AND rr.room_id = ? ORDER BY r.start_time\
+            """, (rs, i) -> {
             final ReservableRoom reservableRoom = new ReservableRoom();
             final ReservableRoomId id = new ReservableRoomId();
             final MeetingRoom meetingRoom = new MeetingRoom();
@@ -79,8 +83,10 @@ public class ReservationRepository {
     public int save(Reservation reservation) {
         final ReservableRoomId id = reservation.getReservableRoom().getReservableRoomId();
         final User user = reservation.getUser();
-        return this.jdbcTemplate.update("INSERT INTO reservation(reservation_id, start_time, end_time, reserved_date, room_id, user_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?)", reservation.getReservationId(),
+        return this.jdbcTemplate.update("""
+                INSERT INTO reservation(reservation_id, start_time, end_time, reserved_date, room_id, user_id) \
+                VALUES (?, ?, ?, ?, ?, ?)\
+                """, reservation.getReservationId(),
             reservation.getStartTime(), reservation.getEndTime(), id.getReservedDate(), id.getRoomId(), user.getUserId());
     }
 

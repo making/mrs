@@ -1,11 +1,9 @@
 package mrs.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @ConfigurationProperties(prefix = "actuator")
-@ConstructorBinding
 public class ActuatorProps {
 
 	private final String password;

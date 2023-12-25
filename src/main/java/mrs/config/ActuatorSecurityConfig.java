@@ -21,7 +21,7 @@ public class ActuatorSecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.mvcMatcher("/actuator/*").authorizeRequests()
+		http.securityMatcher("/actuator/*").authorizeHttpRequests()
 				.mvcMatchers("/actuator/startup").permitAll()
 				.mvcMatchers("/actuator/prometheus").hasRole("ACTUATOR")
 				.and()

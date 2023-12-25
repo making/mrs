@@ -1,7 +1,7 @@
 package mrs.user;
 
-import org.springframework.cloud.sleuth.annotation.NewSpan;
-import org.springframework.cloud.sleuth.annotation.SpanTag;
+import io.micrometer.tracing.annotation.NewSpan;
+import io.micrometer.tracing.annotation.SpanTag;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

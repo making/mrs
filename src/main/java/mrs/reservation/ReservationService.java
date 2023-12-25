@@ -1,7 +1,7 @@
 package mrs.reservation;
 
-import org.springframework.cloud.sleuth.annotation.NewSpan;
-import org.springframework.cloud.sleuth.annotation.SpanTag;
+import io.micrometer.tracing.annotation.NewSpan;
+import io.micrometer.tracing.annotation.SpanTag;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
