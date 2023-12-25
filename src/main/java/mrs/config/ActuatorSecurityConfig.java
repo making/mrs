@@ -1,15 +1,17 @@
 package mrs.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Order(-100)
 @Configuration
-public class ActuatorSecurityConfig extends WebSecurityConfigurerAdapter {
+public class ActuatorSecurityConfig {
 
 	private final ActuatorProps props;
 
@@ -17,8 +19,8 @@ public class ActuatorSecurityConfig extends WebSecurityConfigurerAdapter {
 		this.props = props;
 	}
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.mvcMatcher("/actuator/*").authorizeRequests()
 				.mvcMatchers("/actuator/startup").permitAll()
 				.mvcMatchers("/actuator/prometheus").hasRole("ACTUATOR")
@@ -27,13 +29,11 @@ public class ActuatorSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and().csrf().disable();
+        return http.build();
 	}
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-				.withUser(this.props.getUsername())
-				.password("{noop}" + this.props.getPassword())
-				.roles("ACTUATOR");
+    @Bean
+    InMemoryUserDetailsManager inMemoryAuthManager() throws Exception {
+        return new InMemoryUserDetailsManager(User.builder().username(this.props.getUsername()).password("{noop}" + this.props.getPassword()).roles("ACTUATOR").build());
 	}
 }
