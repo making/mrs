@@ -19,21 +19,32 @@ public class ActuatorSecurityConfig {
 		this.props = props;
 	}
 
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.securityMatcher("/actuator/*").authorizeHttpRequests()
-				.mvcMatchers("/actuator/startup").permitAll()
-				.mvcMatchers("/actuator/prometheus").hasRole("ACTUATOR")
-				.and()
-				.httpBasic()
-				.and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and().csrf().disable();
-        return http.build();
+	@Bean
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.securityMatcher("/actuator/*")
+			.authorizeHttpRequests()
+			.requestMatchers("/actuator/startup")
+			.permitAll()
+			.requestMatchers("/actuator/prometheus")
+			.hasRole("ACTUATOR")
+			.and()
+			.httpBasic()
+			.and()
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.csrf()
+			.disable();
+		return http.build();
 	}
 
-    @Bean
-    InMemoryUserDetailsManager inMemoryAuthManager() throws Exception {
-        return new InMemoryUserDetailsManager(User.builder().username(this.props.getUsername()).password("{noop}" + this.props.getPassword()).roles("ACTUATOR").build());
+	@Bean
+	InMemoryUserDetailsManager inMemoryAuthManager() throws Exception {
+		return new InMemoryUserDetailsManager(User.builder()
+			.username(this.props.getUsername())
+			.password("{noop}" + this.props.getPassword())
+			.roles("ACTUATOR")
+			.build());
 	}
+
 }

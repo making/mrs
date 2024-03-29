@@ -3,6 +3,7 @@ package mrs.reservation;
 import am.ik.yavi.core.CustomConstraint;
 
 public enum EndTimeMustBeAfterStartTimeConstraint implements CustomConstraint<Reservation> {
+
 	INSTANCE;
 
 	@Override
@@ -22,4 +23,5 @@ public enum EndTimeMustBeAfterStartTimeConstraint implements CustomConstraint<Re
 		}
 		return value.getEndTime().isAfter(value.getStartTime());
 	}
+
 }

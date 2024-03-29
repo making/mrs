@@ -14,25 +14,24 @@ import java.util.List;
 @Controller
 public class RoomsController {
 
-    private final ReservationService reservationService;
+	private final ReservationService reservationService;
 
-    public RoomsController(ReservationService reservationService) {
-        this.reservationService = reservationService;
-    }
+	public RoomsController(ReservationService reservationService) {
+		this.reservationService = reservationService;
+	}
 
-    @GetMapping(path = {"/", "/rooms"})
-    public String listRooms(Model model) {
-        LocalDate today = LocalDate.now();
-        model.addAttribute("date", today);
-        return listRooms(today, model);
-    }
+	@GetMapping(path = { "/", "/rooms" })
+	public String listRooms(Model model) {
+		LocalDate today = LocalDate.now();
+		model.addAttribute("date", today);
+		return listRooms(today, model);
+	}
 
-    @GetMapping(path = "rooms/{date}")
-    public String listRooms(
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date,
-        Model model) {
-        List<ReservableRoom> rooms = this.reservationService.findReservableRooms(date);
-        model.addAttribute("rooms", rooms);
-        return "rooms/listRooms";
-    }
+	@GetMapping(path = "rooms/{date}")
+	public String listRooms(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date, Model model) {
+		List<ReservableRoom> rooms = this.reservationService.findReservableRooms(date);
+		model.addAttribute("rooms", rooms);
+		return "rooms/listRooms";
+	}
+
 }

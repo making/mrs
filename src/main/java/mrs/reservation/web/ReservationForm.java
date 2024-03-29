@@ -11,29 +11,31 @@ import mrs.user.User;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class ReservationForm implements Serializable {
-    @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime endTime;
 
-    @DateTimeFormat(pattern = "HH:mm")
-    private LocalTime startTime;
+	@DateTimeFormat(pattern = "HH:mm")
+	private LocalTime endTime;
 
-    public LocalTime getEndTime() {
-        return endTime;
-    }
+	@DateTimeFormat(pattern = "HH:mm")
+	private LocalTime startTime;
 
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
+	public LocalTime getEndTime() {
+		return endTime;
+	}
 
-    public LocalTime getStartTime() {
-        return startTime;
-    }
+	public void setEndTime(LocalTime endTime) {
+		this.endTime = endTime;
+	}
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
+	public LocalTime getStartTime() {
+		return startTime;
+	}
 
-    public Validated<Reservation> toReservation(Integer reservationId, ReservableRoom reservableRoom, User user) {
-        return Reservation.of(reservationId, this.startTime, this.endTime, reservableRoom, user);
-    }
+	public void setStartTime(LocalTime startTime) {
+		this.startTime = startTime;
+	}
+
+	public Validated<Reservation> toReservation(Integer reservationId, ReservableRoom reservableRoom, User user) {
+		return Reservation.of(reservationId, this.startTime, this.endTime, reservableRoom, user);
+	}
+
 }

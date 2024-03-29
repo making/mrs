@@ -10,14 +10,23 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class WebSecurityConfig {
 
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests().requestMatchers("/js/**", "/css/**").permitAll()
-            .requestMatchers("/**").authenticated().and().formLogin()
-            .loginPage("/loginForm").loginProcessingUrl("/login")
-            .usernameParameter("username").passwordParameter("password")
-            .defaultSuccessUrl("/rooms").failureUrl("/loginForm?error=true")
-            .permitAll();
-        return http.build();
-    }
+	@Bean
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.authorizeHttpRequests()
+			.requestMatchers("/js/**", "/css/**")
+			.permitAll()
+			.requestMatchers("/**")
+			.authenticated()
+			.and()
+			.formLogin()
+			.loginPage("/loginForm")
+			.loginProcessingUrl("/login")
+			.usernameParameter("username")
+			.passwordParameter("password")
+			.defaultSuccessUrl("/rooms")
+			.failureUrl("/loginForm?error=true")
+			.permitAll();
+		return http.build();
+	}
+
 }

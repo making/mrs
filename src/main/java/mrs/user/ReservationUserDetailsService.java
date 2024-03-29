@@ -10,18 +10,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReservationUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    public ReservationUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+	public ReservationUserDetailsService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
-    @Override
+	@Override
 	@NewSpan
-    public UserDetails loadUserByUsername(@SpanTag(key = "username") String username)
-        throws UsernameNotFoundException {
-        User user = this.userRepository.findById(username)
-            .orElseThrow(() -> new UsernameNotFoundException(username + " is not found."));
-        return new ReservationUserDetails(user);
-    }
+	public UserDetails loadUserByUsername(@SpanTag(key = "username") String username) throws UsernameNotFoundException {
+		User user = this.userRepository.findById(username)
+			.orElseThrow(() -> new UsernameNotFoundException(username + " is not found."));
+		return new ReservationUserDetails(user);
+	}
+
 }

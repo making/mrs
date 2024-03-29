@@ -10,7 +10,6 @@ public class ActuatorProps {
 
 	private final String username;
 
-
 	public ActuatorProps(@DefaultValue("actuator") String username, @DefaultValue("actuator") String password) {
 		this.username = username;
 		this.password = password;
@@ -23,4 +22,5 @@ public class ActuatorProps {
 	public String getUsername() {
 		return username;
 	}
+
 }

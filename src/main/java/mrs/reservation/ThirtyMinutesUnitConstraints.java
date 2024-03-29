@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import am.ik.yavi.core.CustomConstraint;
 
 public enum ThirtyMinutesUnitConstraints implements CustomConstraint<LocalTime> {
+
 	INSTANCE;
 
 	@Override
@@ -24,4 +25,5 @@ public enum ThirtyMinutesUnitConstraints implements CustomConstraint<LocalTime> 
 		}
 		return value.getMinute() % 30 == 0;
 	}
+
 }

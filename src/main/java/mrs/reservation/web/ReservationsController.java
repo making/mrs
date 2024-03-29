@@ -33,42 +33,40 @@ import jakarta.validation.Valid;
 @RequestMapping("reservations/{date}/{roomId}")
 public class ReservationsController {
 
-    private final ReservationService reservationService;
+	private final ReservationService reservationService;
 
-    private final RoomService roomService;
+	private final RoomService roomService;
 
-    public ReservationsController(RoomService roomService, ReservationService reservationService) {
-        this.roomService = roomService;
-        this.reservationService = reservationService;
-    }
+	public ReservationsController(RoomService roomService, ReservationService reservationService) {
+		this.roomService = roomService;
+		this.reservationService = reservationService;
+	}
 
-    @PostMapping(params = "cancel")
-    public String cancel(@RequestParam Integer reservationId,
-                         @PathVariable Integer roomId,
-                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date,
-                         Model model) {
+	@PostMapping(params = "cancel")
+	public String cancel(@RequestParam Integer reservationId, @PathVariable Integer roomId,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date, Model model) {
 
-        try {
-            Reservation reservation = this.reservationService.findOne(reservationId);
-            this.reservationService.cancel(reservation);
-        } catch (AccessDeniedException e) {
-            model.addAttribute("error", e.getMessage());
-            return reserveForm(date, roomId, model);
-        }
-        return "redirect:/reservations/{date}/{roomId}";
-    }
+		try {
+			Reservation reservation = this.reservationService.findOne(reservationId);
+			this.reservationService.cancel(reservation);
+		}
+		catch (AccessDeniedException e) {
+			model.addAttribute("error", e.getMessage());
+			return reserveForm(date, roomId, model);
+		}
+		return "redirect:/reservations/{date}/{roomId}";
+	}
 
-    @PostMapping
-    public String reserve(@Valid ReservationForm form, BindingResult bindingResult,
-                          @AuthenticationPrincipal ReservationUserDetails userDetails,
-                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date,
-                          @PathVariable Integer roomId, Model model) {
-        if (bindingResult.hasErrors()) {
-            return reserveForm(date, roomId, model);
-        }
+	@PostMapping
+	public String reserve(@Valid ReservationForm form, BindingResult bindingResult,
+			@AuthenticationPrincipal ReservationUserDetails userDetails,
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date, @PathVariable Integer roomId,
+			Model model) {
+		if (bindingResult.hasErrors()) {
+			return reserveForm(date, roomId, model);
+		}
 
-        ReservableRoom reservableRoom = new ReservableRoom(
-            new ReservableRoomId(roomId, date));
+		ReservableRoom reservableRoom = new ReservableRoom(new ReservableRoomId(roomId, date));
 		Validated<Reservation> reservationValidated = form.toReservation(null, reservableRoom, userDetails.getUser());
 		if (!reservationValidated.isValid()) {
 			reservationValidated.errors().apply(bindingResult::rejectValue);
@@ -77,36 +75,37 @@ public class ReservationsController {
 		try {
 			Reservation reservation = reservationValidated.value();
 			this.reservationService.reserve(reservation);
-        } catch (ReservationException e) {
-            model.addAttribute("error", e.getMessage());
-            return reserveForm(date, roomId, model);
-        }
-        return "redirect:/reservations/{date}/{roomId}";
-    }
+		}
+		catch (ReservationException e) {
+			model.addAttribute("error", e.getMessage());
+			return reserveForm(date, roomId, model);
+		}
+		return "redirect:/reservations/{date}/{roomId}";
+	}
 
-    @GetMapping
-    public String reserveForm(
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date,
-        @PathVariable Integer roomId, Model model) {
-        ReservableRoomId reservableRoomId = new ReservableRoomId(roomId, date);
-        List<Reservation> reservations = this.reservationService
-            .findReservations(reservableRoomId);
+	@GetMapping
+	public String reserveForm(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PathVariable LocalDate date,
+			@PathVariable Integer roomId, Model model) {
+		ReservableRoomId reservableRoomId = new ReservableRoomId(roomId, date);
+		List<Reservation> reservations = this.reservationService.findReservations(reservableRoomId);
 
-        LocalTime baseTime = LocalTime.of(0, 0);
-        List<LocalTime> timeList = IntStream.range(0, 24 * 2)
-            .mapToObj(i -> baseTime.plusMinutes(30 * i)).collect(Collectors.toList());
-        model.addAttribute("room", roomService.findMeetingRoom(roomId));
-        model.addAttribute("reservations", reservations);
-        model.addAttribute("timeList", timeList);
-        return "reservations/reserveForm";
-    }
+		LocalTime baseTime = LocalTime.of(0, 0);
+		List<LocalTime> timeList = IntStream.range(0, 24 * 2)
+			.mapToObj(i -> baseTime.plusMinutes(30 * i))
+			.collect(Collectors.toList());
+		model.addAttribute("room", roomService.findMeetingRoom(roomId));
+		model.addAttribute("reservations", reservations);
+		model.addAttribute("timeList", timeList);
+		return "reservations/reserveForm";
+	}
 
-    @ModelAttribute
-    public ReservationForm setUpForm() {
-        ReservationForm form = new ReservationForm();
-        // デフォルト値
-        form.setStartTime(LocalTime.of(9, 0));
-        form.setEndTime(LocalTime.of(10, 0));
-        return form;
-    }
+	@ModelAttribute
+	public ReservationForm setUpForm() {
+		ReservationForm form = new ReservationForm();
+		// デフォルト値
+		form.setStartTime(LocalTime.of(9, 0));
+		form.setEndTime(LocalTime.of(10, 0));
+		return form;
+	}
+
 }

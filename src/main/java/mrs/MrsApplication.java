@@ -10,8 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 public class MrsApplication {
 
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(MrsApplication.class)
-				.applicationStartup(new BufferingApplicationStartup(2048))
-				.run(args);
+		new SpringApplicationBuilder(MrsApplication.class).applicationStartup(new BufferingApplicationStartup(2048))
+			.run(args);
 	}
+
 }

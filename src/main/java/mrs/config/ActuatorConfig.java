@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ActuatorConfig {
+
 	@Bean
 	public MeterFilter customMeterFilter() {
 		return MeterFilter.deny(id -> {
@@ -14,4 +15,5 @@ public class ActuatorConfig {
 			return uri != null && (uri.startsWith("/actuator") || uri.startsWith("/cloudfoundryapplication"));
 		});
 	}
+
 }
