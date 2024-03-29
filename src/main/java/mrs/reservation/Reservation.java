@@ -3,9 +3,11 @@ package mrs.reservation;
 import java.time.LocalTime;
 import java.util.Objects;
 
-import am.ik.yavi.builder.ValidatorBuilder;
+import am.ik.yavi.arguments.Arguments5Validator;
+import am.ik.yavi.arguments.ArgumentsValidators;
+import am.ik.yavi.builder.IntegerValidatorBuilder;
+import am.ik.yavi.builder.ObjectValidatorBuilder;
 import am.ik.yavi.core.Validated;
-import am.ik.yavi.core.Validator;
 import jakarta.annotation.Nullable;
 import mrs.user.User;
 import org.jilt.Builder;
@@ -16,20 +18,26 @@ import org.jilt.Opt;
 public record Reservation(@Nullable @Opt Integer reservationId, LocalTime startTime, LocalTime endTime,
 		ReservableRoom reservableRoom, User user) {
 
-	private static Validator<Reservation> validator = ValidatorBuilder.<Reservation>of()
-		.constraintOnObject(Reservation::startTime, "startTime",
-				c -> c.notNull().message("必須です").predicate(ThirtyMinutesUnitConstraints.INSTANCE))
-		.constraintOnObject(Reservation::endTime, "endTime",
-				c -> c.notNull().message("必須です").predicate(ThirtyMinutesUnitConstraints.INSTANCE))
-		.constraintOnObject(Reservation::user, "user", c -> c.notNull().message("必須です"))
-		.constraintOnTarget(EndTimeMustBeAfterStartTimeConstraint.INSTANCE, "endTime")
-		.build();
+	private final static Arguments5Validator<Integer, LocalTime, LocalTime, ReservableRoom, User, Reservation> validator = ArgumentsValidators
+		.split(IntegerValidatorBuilder.of("reservationId", c -> c).build(),
+				ObjectValidatorBuilder
+					.<LocalTime>of("startTime",
+							c -> c.notNull().message("必須です").predicate(ThirtyMinutesUnitConstraints.INSTANCE))
+					.build(),
+				ObjectValidatorBuilder
+					.<LocalTime>of("endTime",
+							c -> c.notNull().message("必須です").predicate(ThirtyMinutesUnitConstraints.INSTANCE))
+					.build(),
+				ObjectValidatorBuilder.<ReservableRoom>of("reservableRoom", c -> c).build(),
+				ObjectValidatorBuilder.<User>of("user", c -> c.notNull().message("必須です")).build())
+		.apply(Reservation::new)
+		.andThen(ObjectValidatorBuilder
+			.<Reservation>of("endTime", c -> c.predicate(EndTimeMustBeAfterStartTimeConstraint.INSTANCE))
+			.build());
 
-	@SuppressWarnings("NullAway")
 	public static Validated<Reservation> of(@Nullable Integer reservationId, @Nullable LocalTime startTime,
 			@Nullable LocalTime endTime, ReservableRoom reservableRoom, @Nullable User user) {
-		return validator.applicative()
-			.validate(new Reservation(reservationId, startTime, endTime, reservableRoom, user));
+		return validator.validate(reservationId, startTime, endTime, reservableRoom, user);
 	}
 
 	public boolean overlap(Reservation target) {
