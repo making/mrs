@@ -21,6 +21,7 @@ public class RoomsController {
 	}
 
 	@GetMapping(path = { "/", "/rooms" })
+	@SuppressWarnings("JavaTimeDefaultTimeZone")
 	public String listRooms(Model model) {
 		LocalDate today = LocalDate.now();
 		model.addAttribute("date", today);

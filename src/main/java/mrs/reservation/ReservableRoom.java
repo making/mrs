@@ -7,6 +7,7 @@ import mrs.room.MeetingRoom;
 
 public record ReservableRoom(ReservableRoomId reservableRoomId, @Nullable MeetingRoom meetingRoom) {
 	@Override
+	@SuppressWarnings("EqualsGetClass")
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;

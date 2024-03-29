@@ -91,7 +91,7 @@ public class ReservationsController {
 
 		LocalTime baseTime = LocalTime.of(0, 0);
 		List<LocalTime> timeList = IntStream.range(0, 24 * 2)
-			.mapToObj(i -> baseTime.plusMinutes(30 * i))
+			.mapToObj(i -> baseTime.plusMinutes(30L * i))
 			.collect(Collectors.toList());
 		model.addAttribute("room", roomService.findMeetingRoom(roomId));
 		model.addAttribute("reservations", reservations);
