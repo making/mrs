@@ -39,7 +39,10 @@ public class ReservableRoomRepository {
 				AND rr.room_id = ?
 				AND rr.room_id = mr.room_id
 				FOR UPDATE
-				""").params(reservableRoomId.reservedDate(), reservableRoomId.roomId()).query(rowMapper).optional();
+				""") //
+			.params(reservableRoomId.reservedDate(), reservableRoomId.roomId())
+			.query(rowMapper)
+			.optional();
 	}
 
 	public List<ReservableRoom> findByReservableRoomId_reservedDateOrderByReservableRoomId_roomIdAsc(
