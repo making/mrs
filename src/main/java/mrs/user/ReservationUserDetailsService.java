@@ -2,12 +2,15 @@ package mrs.user;
 
 import io.micrometer.tracing.annotation.NewSpan;
 import io.micrometer.tracing.annotation.SpanTag;
+
+import org.springframework.core.annotation.Order;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@Order(2)
 public class ReservationUserDetailsService implements UserDetailsService {
 
 	private final UserRepository userRepository;

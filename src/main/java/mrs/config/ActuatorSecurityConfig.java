@@ -35,6 +35,7 @@ public class ActuatorSecurityConfig {
 	}
 
 	@Bean
+	@Order(1)
 	InMemoryUserDetailsManager inMemoryAuthManager() throws Exception {
 		return new InMemoryUserDetailsManager(User.builder()
 			.username(this.props.getUsername())
