@@ -53,7 +53,7 @@ public class ReservationService {
 	@Transactional
 	@NewSpan
 	public Reservation reserve(Reservation reservation) {
-		ReservableRoomId reservableRoomId = reservation.getReservableRoom().getReservableRoomId();
+		ReservableRoomId reservableRoomId = reservation.reservableRoom().reservableRoomId();
 		// 悲観ロック
 		this.reservableRoomRepository.findOneForUpdateByReservableRoomId(reservableRoomId)
 			.orElseThrow(() -> new ReservationException.Unavailable("入力の日付・部屋の組み合わせは予約できません。"));
@@ -67,8 +67,7 @@ public class ReservationService {
 			throw new ReservationException.AlreadyReserved("入力の時間帯は既に予約済みです。");
 		}
 		// 予約情報の登録
-		this.reservationRepository.save(reservation);
-		return reservation;
+		return this.reservationRepository.save(reservation);
 	}
 
 }

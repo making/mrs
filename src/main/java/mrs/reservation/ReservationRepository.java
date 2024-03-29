@@ -6,8 +6,10 @@ import java.util.Optional;
 import mrs.room.MeetingRoom;
 import mrs.user.RoleName;
 import mrs.user.User;
+import mrs.user.UserBuilder;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -35,13 +37,10 @@ public class ReservationRepository {
 				""") //
 			.param(reservationId)
 			.query((rs, i) -> {
-				final ReservableRoom reservableRoom = new ReservableRoom();
-				final ReservableRoomId id = new ReservableRoomId();
-				final User user = new User();
-				reservableRoom.setReservableRoomId(id);
-				id.setReservedDate(rs.getDate("reserved_date").toLocalDate());
-				id.setRoomId(rs.getInt("room_id"));
-				user.setUserId(rs.getString("user_id"));
+				final ReservableRoomId id = new ReservableRoomId(rs.getInt("room_id"),
+						rs.getDate("reserved_date").toLocalDate());
+				final User user = UserBuilder.user().userId(rs.getString("user_id")).build();
+				final ReservableRoom reservableRoom = new ReservableRoom(id, null);
 				return new Reservation(reservationId, rs.getTime("start_time").toLocalTime(),
 						rs.getTime("end_time").toLocalTime(), reservableRoom, user);
 			})
@@ -81,34 +80,30 @@ public class ReservationRepository {
 				ORDER BY
 				    r.start_time
 				""") //
-			.params(reservableRoomId.getReservedDate(), reservableRoomId.getRoomId())
+			.params(reservableRoomId.reservedDate(), reservableRoomId.roomId())
 			.query((rs, i) -> {
-				final ReservableRoom reservableRoom = new ReservableRoom();
-				final ReservableRoomId id = new ReservableRoomId();
-				final MeetingRoom meetingRoom = new MeetingRoom();
-				final User user = new User();
 				final int roomId = rs.getInt("room_id");
-				reservableRoom.setMeetingRoom(meetingRoom);
-				reservableRoom.setReservableRoomId(id);
-				id.setReservedDate(rs.getDate("reserved_date").toLocalDate());
-				id.setRoomId(roomId);
-				meetingRoom.setRoomName(rs.getString("room_name"));
-				meetingRoom.setRoomId(roomId);
-				user.setUserId(rs.getString("user_id"));
-				user.setFirstName(rs.getString("first_name"));
-				user.setLastName(rs.getString("last_name"));
-				user.setPassword(rs.getString("password"));
-				user.setRoleName(RoleName.valueOf(rs.getString("role_name")));
+				final ReservableRoomId id = new ReservableRoomId(roomId, rs.getDate("reserved_date").toLocalDate());
+				final MeetingRoom meetingRoom = new MeetingRoom(roomId, rs.getString("room_name"));
+				final ReservableRoom reservableRoom = new ReservableRoom(id, meetingRoom);
+				final User user = UserBuilder.user()
+					.userId(rs.getString("user_id"))
+					.password(rs.getString("password"))
+					.roleName(RoleName.valueOf(rs.getString("role_name")))
+					.firstName(rs.getString("first_name"))
+					.lastName(rs.getString("last_name"))
+					.build();
 				return new Reservation(rs.getInt("reservation_id"), rs.getTime("start_time").toLocalTime(),
 						rs.getTime("end_time").toLocalTime(), reservableRoom, user);
 			})
 			.list();
 	}
 
-	public int save(Reservation reservation) {
-		final ReservableRoomId id = reservation.getReservableRoom().getReservableRoomId();
-		final User user = reservation.getUser();
-		return this.jdbcClient.sql("""
+	public Reservation save(Reservation reservation) {
+		final ReservableRoomId id = reservation.reservableRoom().reservableRoomId();
+		final User user = reservation.user();
+		final GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+		this.jdbcClient.sql("""
 				INSERT INTO reservation(
 				    reservation_id,
 				    start_time,
@@ -126,14 +121,15 @@ public class ReservationRepository {
 				    ?
 				)
 				""")
-			.params(reservation.getReservationId(), reservation.getStartTime(), reservation.getEndTime(),
-					id.getReservedDate(), id.getRoomId(), user.getUserId())
-			.update();
+			.params(reservation.reservationId(), reservation.startTime(), reservation.endTime(), id.reservedDate(),
+					id.roomId(), user.userId())
+			.update(keyHolder, "reservation_id");
+		return ReservationBuilder.from(reservation).reservationId(keyHolder.getKey().intValue()).build();
 	}
 
 	public int delete(Reservation reservation) {
 		return this.jdbcClient.sql("DELETE FROM reservation WHERE reservation_id = ?")
-			.params(reservation.getReservationId())
+			.params(reservation.reservationId())
 			.update();
 	}
 

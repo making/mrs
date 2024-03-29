@@ -17,12 +17,7 @@ public class MeetingRoomRepository {
 	public Optional<MeetingRoom> findById(Integer roomId) {
 		return this.jdbcClient.sql("SELECT room_id, room_name FROM meeting_room WHERE room_id = ?")
 			.params(roomId)
-			.query((rs, i) -> {
-				final MeetingRoom r = new MeetingRoom();
-				r.setRoomId(rs.getInt("room_id"));
-				r.setRoomName(rs.getString("room_name"));
-				return r;
-			})
+			.query(MeetingRoom.class)
 			.optional();
 	}
 

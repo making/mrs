@@ -18,10 +18,10 @@ public enum EndTimeMustBeAfterStartTimeConstraint implements CustomConstraint<Re
 
 	@Override
 	public boolean test(Reservation value) {
-		if (value.getStartTime() == null || value.getEndTime() == null) {
+		if (value.startTime() == null || value.endTime() == null) {
 			return true;
 		}
-		return value.getEndTime().isAfter(value.getStartTime());
+		return value.endTime().isAfter(value.startTime());
 	}
 
 }

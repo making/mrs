@@ -66,7 +66,7 @@ public class ReservationsController {
 			return reserveForm(date, roomId, model);
 		}
 
-		ReservableRoom reservableRoom = new ReservableRoom(new ReservableRoomId(roomId, date));
+		ReservableRoom reservableRoom = new ReservableRoom(new ReservableRoomId(roomId, date), null);
 		Validated<Reservation> reservationValidated = form.toReservation(null, reservableRoom, userDetails.getUser());
 		if (!reservationValidated.isValid()) {
 			reservationValidated.errors().apply(bindingResult::rejectValue);

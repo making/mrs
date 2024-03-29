@@ -16,16 +16,9 @@ public class ReservableRoomRepository {
 
 	private final RowMapper<ReservableRoom> rowMapper = (rs, i) -> {
 		final int roomId = rs.getInt("room_id");
-		final MeetingRoom r = new MeetingRoom();
-		final ReservableRoom rr = new ReservableRoom();
-		final ReservableRoomId id = new ReservableRoomId();
-		r.setRoomId(roomId);
-		r.setRoomName(rs.getString("room_name"));
-		rr.setReservableRoomId(id);
-		rr.setMeetingRoom(r);
-		id.setRoomId(roomId);
-		id.setReservedDate(rs.getDate("reserved_date").toLocalDate());
-		return rr;
+		final ReservableRoomId id = new ReservableRoomId(roomId, rs.getDate("reserved_date").toLocalDate());
+		final MeetingRoom r = new MeetingRoom(roomId, rs.getString("room_name"));
+		return new ReservableRoom(id, r);
 	};
 
 	public ReservableRoomRepository(JdbcClient jdbcClient) {
@@ -46,10 +39,7 @@ public class ReservableRoomRepository {
 				AND rr.room_id = ?
 				AND rr.room_id = mr.room_id
 				FOR UPDATE
-				""")
-			.params(reservableRoomId.getReservedDate(), reservableRoomId.getRoomId())
-			.query(rowMapper)
-			.optional();
+				""").params(reservableRoomId.reservedDate(), reservableRoomId.roomId()).query(rowMapper).optional();
 	}
 
 	public List<ReservableRoom> findByReservableRoomId_reservedDateOrderByReservableRoomId_roomIdAsc(
