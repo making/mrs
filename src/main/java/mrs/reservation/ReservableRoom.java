@@ -7,13 +7,11 @@ import mrs.room.MeetingRoom;
 
 public record ReservableRoom(ReservableRoomId reservableRoomId, @Nullable MeetingRoom meetingRoom) {
 	@Override
-	@SuppressWarnings("EqualsGetClass")
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (o == null || getClass() != o.getClass())
+		if (!(o instanceof ReservableRoom that))
 			return false;
-		ReservableRoom that = (ReservableRoom) o;
 		return Objects.equals(reservableRoomId, that.reservableRoomId);
 	}
 
