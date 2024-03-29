@@ -41,8 +41,13 @@ public class ReservationRepository {
 						rs.getDate("reserved_date").toLocalDate());
 				final User user = UserBuilder.user().userId(rs.getString("user_id")).build();
 				final ReservableRoom reservableRoom = new ReservableRoom(id, null);
-				return new Reservation(reservationId, rs.getTime("start_time").toLocalTime(),
-						rs.getTime("end_time").toLocalTime(), reservableRoom, user);
+				return ReservationBuilder.reservation()
+					.reservationId(reservationId)
+					.startTime(rs.getTime("start_time").toLocalTime())
+					.endTime(rs.getTime("end_time").toLocalTime())
+					.reservableRoom(reservableRoom)
+					.user(user)
+					.build();
 			})
 			.optional();
 	}
@@ -93,8 +98,13 @@ public class ReservationRepository {
 					.firstName(rs.getString("first_name"))
 					.lastName(rs.getString("last_name"))
 					.build();
-				return new Reservation(rs.getInt("reservation_id"), rs.getTime("start_time").toLocalTime(),
-						rs.getTime("end_time").toLocalTime(), reservableRoom, user);
+				return ReservationBuilder.reservation()
+					.reservationId(rs.getInt("reservation_id"))
+					.startTime(rs.getTime("start_time").toLocalTime())
+					.endTime(rs.getTime("end_time").toLocalTime())
+					.reservableRoom(reservableRoom)
+					.user(user)
+					.build();
 			})
 			.list();
 	}

@@ -9,17 +9,17 @@ import am.ik.yavi.core.Validator;
 import mrs.user.User;
 import org.jilt.Builder;
 import org.jilt.BuilderStyle;
+import org.jilt.Opt;
 
-@Builder(style = BuilderStyle.STAGED, toBuilder = "from")
-public record Reservation(Integer reservationId, LocalTime startTime, LocalTime endTime, ReservableRoom reservableRoom,
-		User user) {
+@Builder(style = BuilderStyle.STAGED_PRESERVING_ORDER, toBuilder = "from")
+public record Reservation(@Opt Integer reservationId, LocalTime startTime, LocalTime endTime,
+		ReservableRoom reservableRoom, User user) {
 
 	private static Validator<Reservation> validator = ValidatorBuilder.<Reservation>of()
 		.constraintOnObject(Reservation::startTime, "startTime",
 				c -> c.notNull().message("必須です").predicate(ThirtyMinutesUnitConstraints.INSTANCE))
 		.constraintOnObject(Reservation::endTime, "endTime",
 				c -> c.notNull().message("必須です").predicate(ThirtyMinutesUnitConstraints.INSTANCE))
-		.constraintOnObject(Reservation::user, "user", c -> c.notNull().message("必須です"))
 		.constraintOnObject(Reservation::user, "user", c -> c.notNull().message("必須です"))
 		.constraintOnTarget(EndTimeMustBeAfterStartTimeConstraint.INSTANCE, "endTime")
 		.build();
