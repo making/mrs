@@ -12,20 +12,17 @@ public class WebSecurityConfig {
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests()
-			.requestMatchers("/js/**", "/css/**")
+		http.authorizeHttpRequests(requests -> requests.requestMatchers("/js/**", "/css/**")
 			.permitAll()
 			.requestMatchers("/**")
-			.authenticated()
-			.and()
-			.formLogin()
-			.loginPage("/loginForm")
-			.loginProcessingUrl("/login")
-			.usernameParameter("username")
-			.passwordParameter("password")
-			.defaultSuccessUrl("/rooms")
-			.failureUrl("/loginForm?error=true")
-			.permitAll();
+			.authenticated())
+			.formLogin(login -> login.loginPage("/loginForm")
+				.loginProcessingUrl("/login")
+				.usernameParameter("username")
+				.passwordParameter("password")
+				.defaultSuccessUrl("/rooms")
+				.failureUrl("/loginForm?error=true")
+				.permitAll());
 		return http.build();
 	}
 

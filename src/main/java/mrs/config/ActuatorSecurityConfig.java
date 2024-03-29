@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Order(-100)
 @Configuration
 public class ActuatorSecurityConfig {
@@ -22,19 +24,13 @@ public class ActuatorSecurityConfig {
 	@Bean
 	SecurityFilterChain filterChainForActuator(HttpSecurity http) throws Exception {
 		http.securityMatcher("/actuator/*")
-			.authorizeHttpRequests()
-			.requestMatchers("/actuator/startup")
-			.permitAll()
-			.requestMatchers("/actuator/prometheus")
-			.hasRole("ACTUATOR")
-			.and()
-			.httpBasic()
-			.and()
-			.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-			.csrf()
-			.disable();
+			.authorizeHttpRequests(requests -> requests.requestMatchers("/actuator/startup")
+				.permitAll()
+				.requestMatchers("/actuator/prometheus")
+				.hasRole("ACTUATOR"))
+			.httpBasic(withDefaults())
+			.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.csrf(csrf -> csrf.disable());
 		return http.build();
 	}
 
