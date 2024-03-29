@@ -55,7 +55,7 @@ public class ReservationService {
 	public Reservation reserve(Reservation reservation) {
 		ReservableRoomId reservableRoomId = reservation.reservableRoom().reservableRoomId();
 		// 悲観ロック
-		this.reservableRoomRepository.findOneForUpdateByReservableRoomId(reservableRoomId)
+		var unused = this.reservableRoomRepository.findOneForUpdateByReservableRoomId(reservableRoomId)
 			.orElseThrow(() -> new ReservationException.Unavailable("入力の日付・部屋の組み合わせは予約できません。"));
 
 		// 該当の日付・部屋の全予約情報をReservableRoomテーブルから取得し、重複をチェック
