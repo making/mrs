@@ -23,7 +23,7 @@ jobs:
     - name: mvn test
       run: |
         set -e
-        ./mvnw -V test
+        ./mvnw -V test --no-transfer-progress package
     - name: mvn package
       if: github.ref == 'refs/heads/master'
       run: |
