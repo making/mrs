@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-java@v1
       with:
-        java-version: '11.x'
+        java-version: '17.x'
     - uses: actions/cache@v1
       with:
         path: ~/.m2/repository
@@ -28,20 +28,4 @@ jobs:
       if: github.ref == 'refs/heads/master'
       run: |
         set -e
-        ./mvnw -V package -Dmaven.test.skip=true
-    - uses: jvalkeal/setup-cf-cli@v0
-      if: github.ref == 'refs/heads/master'
-      with:
-        version: 6.51.0        
-    - name: cf push
-      if: github.ref == 'refs/heads/master'
-      env:
-        CF_API: ${{ secrets.CF_API }}
-        CF_USERNAME: ${{ secrets.CF_USERNAME }}
-        CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
-        CF_ORG: ${{ secrets.CF_ORG }}
-        CF_SPACE: ${{ secrets.CF_SPACE }}
-      run: |
-        set -e
-        cf login -a ${CF_API} -u ${CF_USERNAME} -p ${CF_PASSWORD} -o ${CF_ORG} -s ${CF_SPACE}
-        cf push --var push="$(date)"
+        ./mvnw -V package -Dmaven.test.skip=true --no-transfer-progress package
