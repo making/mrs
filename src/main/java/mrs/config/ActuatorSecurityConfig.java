@@ -20,7 +20,7 @@ public class ActuatorSecurityConfig {
 	}
 
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain filterChainForActuator(HttpSecurity http) throws Exception {
 		http.securityMatcher("/actuator/*")
 			.authorizeHttpRequests()
 			.requestMatchers("/actuator/startup")
