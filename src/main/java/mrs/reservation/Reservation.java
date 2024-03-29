@@ -6,13 +6,14 @@ import java.util.Objects;
 import am.ik.yavi.builder.ValidatorBuilder;
 import am.ik.yavi.core.Validated;
 import am.ik.yavi.core.Validator;
+import jakarta.annotation.Nullable;
 import mrs.user.User;
 import org.jilt.Builder;
 import org.jilt.BuilderStyle;
 import org.jilt.Opt;
 
 @Builder(style = BuilderStyle.STAGED_PRESERVING_ORDER, toBuilder = "from")
-public record Reservation(@Opt Integer reservationId, LocalTime startTime, LocalTime endTime,
+public record Reservation(@Nullable @Opt Integer reservationId, LocalTime startTime, LocalTime endTime,
 		ReservableRoom reservableRoom, User user) {
 
 	private static Validator<Reservation> validator = ValidatorBuilder.<Reservation>of()
@@ -24,8 +25,9 @@ public record Reservation(@Opt Integer reservationId, LocalTime startTime, Local
 		.constraintOnTarget(EndTimeMustBeAfterStartTimeConstraint.INSTANCE, "endTime")
 		.build();
 
-	public static Validated<Reservation> of(Integer reservationId, LocalTime startTime, LocalTime endTime,
-			ReservableRoom reservableRoom, User user) {
+	@SuppressWarnings("NullAway")
+	public static Validated<Reservation> of(@Nullable Integer reservationId, @Nullable LocalTime startTime,
+			@Nullable LocalTime endTime, ReservableRoom reservableRoom, @Nullable User user) {
 		return validator.applicative()
 			.validate(new Reservation(reservationId, startTime, endTime, reservableRoom, user));
 	}
