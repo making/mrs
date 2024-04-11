@@ -4,10 +4,8 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 import am.ik.yavi.arguments.Arguments5Validator;
-import am.ik.yavi.arguments.ArgumentsValidators;
-import am.ik.yavi.builder.IntegerValidatorBuilder;
-import am.ik.yavi.builder.ObjectValidatorBuilder;
 import am.ik.yavi.core.Validated;
+import am.ik.yavi.validator.Yavi;
 import jakarta.annotation.Nullable;
 import mrs.user.User;
 import org.jilt.Builder;
@@ -18,22 +16,17 @@ import org.jilt.Opt;
 public record Reservation(@Nullable @Opt Integer reservationId, LocalTime startTime, LocalTime endTime,
 		ReservableRoom reservableRoom, User user) {
 
-	private final static Arguments5Validator<Integer, LocalTime, LocalTime, ReservableRoom, User, Reservation> validator = ArgumentsValidators
-		.split(IntegerValidatorBuilder.of("reservationId", c -> c).build(),
-				ObjectValidatorBuilder
-					.<LocalTime>of("startTime",
-							c -> c.notNull().message("必須です").predicate(ThirtyMinutesUnitConstraints.INSTANCE))
-					.build(),
-				ObjectValidatorBuilder
-					.<LocalTime>of("endTime",
-							c -> c.notNull().message("必須です").predicate(ThirtyMinutesUnitConstraints.INSTANCE))
-					.build(),
-				ObjectValidatorBuilder.<ReservableRoom>of("reservableRoom", c -> c).build(),
-				ObjectValidatorBuilder.<User>of("user", c -> c.notNull().message("必須です")).build())
+	private final static Arguments5Validator<Integer, LocalTime, LocalTime, ReservableRoom, User, Reservation> validator = Yavi
+		.arguments()
+		._integer("reservationId")
+		._localTime("startTime", c -> c.notNull().message("必須です").predicate(ThirtyMinutesUnitConstraints.INSTANCE))
+		._localTime("endTime", c -> c.notNull().message("必須です").predicate(ThirtyMinutesUnitConstraints.INSTANCE))
+		.<ReservableRoom>_object("reservableRoom")
+		.<User>_object("user", c -> c.notNull().message("必須です"))
 		.apply(Reservation::new)
-		.andThen(ObjectValidatorBuilder
-			.<Reservation>of("endTime", c -> c.predicate(EndTimeMustBeAfterStartTimeConstraint.INSTANCE))
-			.build());
+		.andThen(Yavi.arguments()
+			.<Reservation>_object("endTime", c -> c.predicate(EndTimeMustBeAfterStartTimeConstraint.INSTANCE))
+			.get());
 
 	public static Validated<Reservation> of(@Nullable Integer reservationId, @Nullable LocalTime startTime,
 			@Nullable LocalTime endTime, ReservableRoom reservableRoom, @Nullable User user) {
