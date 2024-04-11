@@ -65,6 +65,11 @@
 			<artifactId>micrometer-tracing</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>am.ik.access-logger</groupId>
+			<artifactId>access-logger</artifactId>
+			<version>0.2.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 		</dependency>
