@@ -24,10 +24,7 @@ public class ActuatorSecurityConfig {
 	@Bean
 	SecurityFilterChain filterChainForActuator(HttpSecurity http) throws Exception {
 		http.securityMatcher("/actuator/*")
-			.authorizeHttpRequests(requests -> requests.requestMatchers("/actuator/startup")
-				.permitAll()
-				.requestMatchers("/actuator/prometheus")
-				.hasRole("ACTUATOR"))
+			.authorizeHttpRequests(requests -> requests.requestMatchers("/actuator/prometheus").permitAll())
 			.httpBasic(withDefaults())
 			.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.csrf(csrf -> csrf.disable());
