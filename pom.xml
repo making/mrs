@@ -21,7 +21,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
-		<jilt.version>1.5</jilt.version>
+		<jilt.version>1.6</jilt.version>
 	</properties>
 
 	<dependencies>
